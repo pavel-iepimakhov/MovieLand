@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.movieland.entity.Movie;
 import com.movieland.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,10 +19,11 @@ public class MovieController {
 
     private Gson gson = new Gson();
 
-    @RequestMapping("/v1/movies")
+    @RequestMapping(value = "/v1/movies", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getAllMovies(){
         List<Movie> movies = movieService.getAllMovies();
-        return gson.toJson(movies);
+        String json = gson.toJson(movies);
+        return json;
     }
 }
