@@ -1,7 +1,7 @@
 package com.movieland.dao.impl;
 
 import com.movieland.dao.MovieDao;
-import com.movieland.dao.impl.mapper.MovieRowMapper;
+import com.movieland.dao.impl.mapper.GetAllMoviesRowMapper;
 import com.movieland.entity.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +18,6 @@ public class MovieDaoJdbcImpl implements MovieDao {
     private String getAllMoviesSql;
 
     public List<Movie> getAllMovies() {
-        return jdbcTemplate.query(getAllMoviesSql, new MovieRowMapper());
+        return jdbcTemplate.query(getAllMoviesSql, new GetAllMoviesRowMapper());
     }
 }

@@ -28,11 +28,4 @@ public class Genre {
         this.genreName = genreName;
     }
 
-    private class GenreArrayListSerializer implements JsonSerializer<ArrayList<Genre>> {
-        public JsonElement serialize(ArrayList<Genre> src, Type typeOfSrc, JsonSerializationContext context) {
-
-            src.
-            return new JsonPrimitive(src.toString());
-        }
-    }
 }

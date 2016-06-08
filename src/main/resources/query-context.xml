@@ -5,12 +5,12 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="getAllMoviesSql" class="java.lang.String">
-        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year, group_concat(g.genre_name,', ') genres
+        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, group_concat(g.genre_name,', ') genres
                                   FROM movies m
                                   JOIN movie_genres mg
                                     ON m.movie_id = mg.movie_id
                                   JOIN genres g
                                     ON mg.genre_id = g.genre_id
-                                 GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_price"/>
+                                 GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating"/>
     </bean>
 </beans>
