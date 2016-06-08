@@ -16,7 +16,7 @@ public class GetAllMoviesRowMapper implements RowMapper<Movie> {
         movie.setMovieNameEng(resultSet.getString("movie_name_eng"));
         movie.setMovieNameRus(resultSet.getString("movie_name_rus"));
         movie.setMovieYear(resultSet.getInt("movie_year"));
-        movie.setMovieRating(resultSet.getInt("movie_rating"));
+        movie.setMovieRating(resultSet.getDouble("movie_rating"));
         ArrayList<Genre> genres = new ArrayList<>();
         for(String genre : resultSet.getString("genres").split(", ")) {
             genres.add(new Genre(genre));

@@ -28,4 +28,19 @@ public class Genre {
         this.genreName = genreName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Genre genre = (Genre) o;
+
+        return getGenreName().equals(genre.getGenreName());
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getGenreName().hashCode();
+    }
 }

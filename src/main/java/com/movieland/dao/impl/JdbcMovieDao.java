@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class MovieDaoJdbcImpl implements MovieDao {
+public class JdbcMovieDao implements MovieDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
