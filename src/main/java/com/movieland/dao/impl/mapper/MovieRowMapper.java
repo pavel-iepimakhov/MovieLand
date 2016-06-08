@@ -1,5 +1,6 @@
 package com.movieland.dao.impl.mapper;
 
+import com.movieland.entity.Genre;
 import com.movieland.entity.Movie;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -15,9 +16,9 @@ public class MovieRowMapper implements RowMapper<Movie> {
         movie.setMovieNameEng(resultSet.getString("movie_name_eng"));
         movie.setMovieNameRus(resultSet.getString("movie_name_rus"));
         movie.setMovieYear(resultSet.getInt("movie_year"));
-        ArrayList<String> genres = new ArrayList<>();
+        ArrayList<Genre> genres = new ArrayList<>();
         for(String genre : resultSet.getString("genres").split(", ")) {
-            genres.add(genre);
+            genres.add(new Genre(genre));
         }
         movie.setGenres(genres);
         return movie;

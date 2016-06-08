@@ -44,4 +44,4 @@ crashlytics.properties
 crashlytics-build.properties
 
 #ignore SQLite database to prevent data corruption
-/src/main/resources/movieland.sqlite
+#/src/main/resources/movieland.sqlite

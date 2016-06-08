@@ -10,8 +10,9 @@ public class Movie {
     private double movieRating;
     private double moviePrice;
     private String movieDescription;
-    private ArrayList<String> reviews;
-    private ArrayList<String> genres;
+    private ArrayList<MovieReview> reviews;
+    private ArrayList<Genre> genres;
+    private ArrayList<Country> countries;
 
     public int getMovieId() {
         return movieId;
@@ -69,20 +70,28 @@ public class Movie {
         this.movieDescription = movieDescription;
     }
 
-    public ArrayList<String> getReviews() {
+    public ArrayList<MovieReview> getReviews() {
         return reviews;
     }
 
-    public void setReviews(ArrayList<String> reviews) {
+    public void setReviews(ArrayList<MovieReview> reviews) {
         this.reviews = reviews;
     }
 
-    public ArrayList<String> getGenres() {
+    public ArrayList<Genre> getGenres() {
         return genres;
     }
 
-    public void setGenres(ArrayList<String> genres) {
+    public void setGenres(ArrayList<Genre> genres) {
         this.genres = genres;
+    }
+
+    public ArrayList<Country> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(ArrayList<Country> countries) {
+        this.countries = countries;
     }
 
     @Override
@@ -97,6 +106,7 @@ public class Movie {
                 ", movieDescription='" + movieDescription + '\'' +
                 ", reviews=" + reviews +
                 ", genres=" + genres +
+                ", countries=" + countries +
                 '}';
     }
 }
