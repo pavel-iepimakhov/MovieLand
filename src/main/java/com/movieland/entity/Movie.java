@@ -1,6 +1,6 @@
 package com.movieland.entity;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Movie {
     private int movieId;
@@ -10,8 +10,8 @@ public class Movie {
     private double movieRating;
     private double moviePrice;
     private String movieDescription;
-    private String[] reviews;
-    private String[] genres;
+    private ArrayList<String> reviews;
+    private ArrayList<String> genres;
 
     public int getMovieId() {
         return movieId;
@@ -69,19 +69,19 @@ public class Movie {
         this.movieDescription = movieDescription;
     }
 
-    public String[] getReviews() {
+    public ArrayList<String> getReviews() {
         return reviews;
     }
 
-    public void setReviews(String[] reviews) {
+    public void setReviews(ArrayList<String> reviews) {
         this.reviews = reviews;
     }
 
-    public String[] getGenres() {
+    public ArrayList<String> getGenres() {
         return genres;
     }
 
-    public void setGenres(String[] genres) {
+    public void setGenres(ArrayList<String> genres) {
         this.genres = genres;
     }
 
@@ -95,8 +95,8 @@ public class Movie {
                 ", movieRating=" + movieRating +
                 ", moviePrice=" + moviePrice +
                 ", movieDescription='" + movieDescription + '\'' +
-                ", reviews=" + Arrays.toString(reviews) +
-                ", genres=" + Arrays.toString(genres) +
+                ", reviews=" + reviews +
+                ", genres=" + genres +
                 '}';
     }
 }

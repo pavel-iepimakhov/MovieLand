@@ -7,6 +7,8 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
+    <import resource="query-context.xml"/>
+
     <context:component-scan base-package="com.movieland">
         <context:exclude-filter type="regex" expression="com\.movieland\.controller\..*" />
     </context:component-scan>
