@@ -12,8 +12,6 @@ import java.io.IOException;
 
 public class MovieTypeAdapter extends TypeAdapter<Movie> {
 
-    private StringBuilder sb = new StringBuilder();
-
     @Override
     public Movie read(JsonReader jsonReader) throws IOException {
         return null;
