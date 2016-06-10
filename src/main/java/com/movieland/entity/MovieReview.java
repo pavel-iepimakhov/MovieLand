@@ -3,7 +3,7 @@ package com.movieland.entity;
 public class MovieReview {
     private int movieId;
     private int reviewId;
-    private User userId;
+    private User user;
     private String reviewText;
 
     public int getMovieId() {
@@ -22,12 +22,12 @@ public class MovieReview {
         this.reviewId = reviewId;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getReviewText() {

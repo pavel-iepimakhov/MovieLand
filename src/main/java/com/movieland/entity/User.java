@@ -46,4 +46,9 @@ public class User {
                 ", userEmail='" + userEmail + '\'' +
                 '}';
     }
+
+    public User(int userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+    }
 }

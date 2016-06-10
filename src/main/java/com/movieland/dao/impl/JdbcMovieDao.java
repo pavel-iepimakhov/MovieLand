@@ -1,7 +1,8 @@
 package com.movieland.dao.impl;
 
 import com.movieland.dao.MovieDao;
-import com.movieland.dao.impl.mapper.MoviesRowMapper;
+import com.movieland.dao.impl.mapper.MovieReviewRowMapper;
+import com.movieland.dao.impl.mapper.MovieRowMapper;
 import com.movieland.entity.Movie;
 import com.movieland.entity.MovieReview;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +22,23 @@ public class JdbcMovieDao implements MovieDao {
     @Autowired
     private String getMovieByIdSql;
 
-    private MoviesRowMapper moviesRowMapper = new MoviesRowMapper();
+    @Autowired
+    private String getReviewsByMovieIdSql;
+
+    private MovieRowMapper movieRowMapper = new MovieRowMapper();
+    private MovieReviewRowMapper movieReviewRowMapper = new MovieReviewRowMapper();
 
     public List<Movie> getAllMovies() {
-        return jdbcTemplate.query(getAllMoviesSql, moviesRowMapper);
+        return jdbcTemplate.query(getAllMoviesSql, movieRowMapper);
     }
 
-    @Override
     public Movie getMovieById(int movieId) {
-        Movie movie = jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{movieId}, moviesRowMapper);
+        Movie movie = jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{movieId}, movieRowMapper);
         return movie;
     }
 
-    public List<MovieReview> getNReviewsByMovieId(){
-        return null;
+    public List<MovieReview> getReviewsByMovieId(int movieId) {
+        List<MovieReview> movieReviews = jdbcTemplate.query(getReviewsByMovieIdSql, new Object[]{movieId}, movieReviewRowMapper);
+        return movieReviews;
     }
 }

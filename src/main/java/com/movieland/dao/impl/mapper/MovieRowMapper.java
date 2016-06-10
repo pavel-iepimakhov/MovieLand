@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-public class MoviesRowMapper implements RowMapper<Movie> {
+public class MovieRowMapper implements RowMapper<Movie> {
     public Movie mapRow(ResultSet resultSet, int i) throws SQLException {
         Movie movie = new Movie();
         movie.setMovieId(resultSet.getInt("movie_id"));
