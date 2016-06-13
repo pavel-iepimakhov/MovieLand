@@ -1,6 +1,6 @@
 package com.movieland.entity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Movie {
     private int movieId;
@@ -10,9 +10,9 @@ public class Movie {
     private double movieRating;
     private double moviePrice;
     private String movieDescription;
-    private ArrayList<MovieReview> reviews;
-    private ArrayList<Genre> genres;
-    private ArrayList<Country> countries;
+    private List<MovieReview> reviews;
+    private List<Genre> genres;
+    private List<Country> countries;
 
     public int getMovieId() {
         return movieId;
@@ -70,27 +70,27 @@ public class Movie {
         this.movieDescription = movieDescription;
     }
 
-    public ArrayList<MovieReview> getReviews() {
+    public List<MovieReview> getReviews() {
         return reviews;
     }
 
-    public void setReviews(ArrayList<MovieReview> reviews) {
+    public void setReviews(List<MovieReview> reviews) {
         this.reviews = reviews;
     }
 
-    public ArrayList<Genre> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
-    public void setGenres(ArrayList<Genre> genres) {
+    public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
 
-    public ArrayList<Country> getCountries() {
+    public List<Country> getCountries() {
         return countries;
     }
 
-    public void setCountries(ArrayList<Country> countries) {
+    public void setCountries(List<Country> countries) {
         this.countries = countries;
     }
 

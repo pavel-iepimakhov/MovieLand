@@ -8,11 +8,10 @@ import org.junit.Test;
 import java.sql.ResultSet;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class MovieRowMapperTest {
+public class MoviesRowMapperTest {
     @Test
     public void testMapRow() throws Exception {
         ResultSet resultSet = mock(ResultSet.class);
@@ -24,8 +23,8 @@ public class MovieRowMapperTest {
         when(resultSet.getString("genres")).thenReturn("драма,комедия,боевик");
         when(resultSet.getString("countries")).thenReturn("США,Германия");
 
-        MovieRowMapper movieRowMapper = new MovieRowMapper();
-        Movie actualMovie = movieRowMapper.mapRow(resultSet, 0);
+        MoviesRowMapper moviesRowMapper = new MoviesRowMapper();
+        Movie actualMovie = moviesRowMapper.mapRow(resultSet, 0);
 
         assertTrue(actualMovie.getMovieId() == 111);
         assertTrue(actualMovie.getMovieNameEng().equals("English title"));

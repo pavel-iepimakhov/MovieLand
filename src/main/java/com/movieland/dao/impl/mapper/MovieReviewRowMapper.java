@@ -1,14 +1,11 @@
 package com.movieland.dao.impl.mapper;
 
-import com.movieland.entity.Country;
-import com.movieland.entity.Genre;
 import com.movieland.entity.MovieReview;
 import com.movieland.entity.User;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 
 public class MovieReviewRowMapper implements RowMapper<MovieReview> {

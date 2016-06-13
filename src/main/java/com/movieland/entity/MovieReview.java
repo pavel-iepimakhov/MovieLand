@@ -40,8 +40,6 @@ public class MovieReview {
 
     @Override
     public String toString() {
-        return "MovieReview{" +
-                "reviewText='" + reviewText + '\'' +
-                '}';
+        return user.getUserName() + ": " + getReviewText();
     }
 }

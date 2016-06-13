@@ -6,7 +6,6 @@ import com.movieland.entity.Movie;
 import com.movieland.entity.adapter.MovieTypeAdapter;
 import com.movieland.service.JsonConverterService;
 import org.springframework.stereotype.Service;
-import com.movieland.entity.Genre;
 
 @Service
 public class GsonJsonConverterService implements JsonConverterService {

@@ -3,7 +3,6 @@ package com.movieland.entity.adapter;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.movieland.entity.Genre;
 import com.movieland.entity.Movie;
 import org.springframework.util.StringUtils;
 
