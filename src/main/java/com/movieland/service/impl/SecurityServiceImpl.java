@@ -40,9 +40,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public boolean isSecurityTokenValid(String securityToken) {
         User user = tokenCache.getIfPresent(securityToken);
-        if(user != null)
-            return true;
-        else return false;
+        return user != null;
     }
 
 }

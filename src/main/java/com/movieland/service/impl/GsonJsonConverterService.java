@@ -20,7 +20,6 @@ public class GsonJsonConverterService implements JsonConverterService {
 
     @Override
     public String objectToJson(Object object) {
-        String json = gson.toJson(object);
-        return json;
+        return gson.toJson(object);
     }
 }

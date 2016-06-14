@@ -45,18 +45,15 @@ public class JdbcMovieDao implements MovieDao {
     }
 
     public Movie getMovieById(int movieId) {
-        Movie movie = jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{movieId}, movieRowMapper);
-        return movie;
+        return jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{movieId}, movieRowMapper);
     }
 
     public List<MovieReview> getReviewsByMovieId(int movieId) {
-        List<MovieReview> movieReviews = jdbcTemplate.query(getReviewsByMovieIdSql, new Object[]{movieId}, movieReviewRowMapper);
-        return movieReviews;
+        return jdbcTemplate.query(getReviewsByMovieIdSql, new Object[]{movieId}, movieReviewRowMapper);
     }
 
     public List<Genre> getGenresByMovieId(int movieId) {
-        List<Genre> movieGenres = jdbcTemplate.query(getGenresByMovieIdSql, new Object[]{movieId}, genreRowMapper);
-        return movieGenres;
+        return jdbcTemplate.query(getGenresByMovieIdSql, new Object[]{movieId}, genreRowMapper);
     }
 
 }

@@ -24,15 +24,13 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User getUserById(int userId) {
-        User user = jdbcTemplate.queryForObject(getUserByIdSql, new Object[]{userId}, userRowMapper);
-        return user;
+        return jdbcTemplate.queryForObject(getUserByIdSql, new Object[]{userId}, userRowMapper);
     }
 
     @Override
     public User tryGetUserByUsernameAndPassword(String userName, String userPassword) {
         try {
-            User user = jdbcTemplate.queryForObject(getUserByNameAndPasswordSql, new Object[]{userName, userPassword}, userRowMapper);
-            return user;
+            return jdbcTemplate.queryForObject(getUserByNameAndPasswordSql, new Object[]{userName, userPassword}, userRowMapper);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
