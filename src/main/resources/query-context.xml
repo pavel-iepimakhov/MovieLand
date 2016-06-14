@@ -5,12 +5,44 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="getAllMoviesSql" class="java.lang.String">
-        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, group_concat(g.genre_name,', ') genres
+        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, group_concat(DISTINCT g.genre_name) genres, group_concat(DISTINCT c.country_name) countries
                                   FROM movies m
                                   JOIN movie_genres mg
                                     ON m.movie_id = mg.movie_id
                                   JOIN genres g
                                     ON mg.genre_id = g.genre_id
-                                 GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating"/>
+                                  JOIN movie_countries mc
+                                    ON mc.movie_id = m.movie_id
+                                  JOIN countries c
+                                    ON c.country_id = mc.country_id
+                                GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating"/>
     </bean>
+
+    <bean id="getMovieByIdSql" class="java.lang.String">
+        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, group_concat(DISTINCT c.country_name) countries
+                                  FROM movies m
+                                  JOIN movie_countries mc
+                                    ON mc.movie_id = m.movie_id
+                                  JOIN countries c
+                                    ON c.country_id = mc.country_id
+                                 WHERE m.movie_id = ?
+                                GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating"/>
+    </bean>
+
+    <bean id="getReviewsByMovieIdSql" class="java.lang.String">
+        <constructor-arg value="SELECT mr.movie_id, mr.review_id, mr.user_id, u.user_name, mr.review_text
+                                  FROM movie_reviews mr
+                                  JOIN users u
+                                    ON mr.user_id = u.user_id
+                                 WHERE mr.movie_id = ?"/>
+    </bean>
+
+    <bean id="getGenresByMovieIdSql" class="java.lang.String">
+        <constructor-arg value="SELECT g.genre_id, genre_name
+                                  FROM movie_genres mg
+                                  JOIN genres g
+                                    ON mg.genre_id = g.genre_id
+                                 WHERE mg.movie_id = ? "/>
+    </bean>
+
 </beans>

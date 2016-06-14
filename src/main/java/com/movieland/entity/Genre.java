@@ -1,14 +1,7 @@
 package com.movieland.entity;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-
 public class Genre {
+    private  int genreId;
     private String genreName;
 
     public String getGenreName() {
@@ -19,13 +12,12 @@ public class Genre {
         this.genreName = genreName;
     }
 
-    @Override
-    public String toString() {
-        return genreName;
+    public int getGenreId() {
+        return genreId;
     }
 
-    public Genre(String genreName) {
-        this.genreName = genreName;
+    public void setGenreId(int genreId) {
+        this.genreId = genreId;
     }
 
     @Override
@@ -35,12 +27,29 @@ public class Genre {
 
         Genre genre = (Genre) o;
 
+        if (getGenreId() != genre.getGenreId()) return false;
         return getGenreName().equals(genre.getGenreName());
 
     }
 
     @Override
     public int hashCode() {
-        return getGenreName().hashCode();
+        int result = getGenreId();
+        result = 31 * result + getGenreName().hashCode();
+        return result;
+    }
+
+    public Genre(int genreId, String genreName) {
+        this.genreId = genreId;
+        this.genreName = genreName;
+    }
+
+    public Genre(String genreName) {
+        this.genreName = genreName;
+    }
+
+    @Override
+    public String toString() {
+        return getGenreName();
     }
 }
