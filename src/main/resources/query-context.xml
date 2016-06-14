@@ -45,4 +45,25 @@
                                  WHERE mg.movie_id = ? "/>
     </bean>
 
+    <bean id="getUserByIdSql" class="java.lang.String">
+        <constructor-arg value="SELECT user_id,
+                                       user_email,
+                                       user_name,
+                                       user_password,
+                                       user_role
+                                  FROM users
+                                 WHERE user_id = ?"/>
+    </bean>
+
+    <bean id="getUserByNameAndPasswordSql" class="java.lang.String">
+        <constructor-arg value="SELECT user_id,
+                                       user_email,
+                                       user_name,
+                                       user_password,
+                                       user_role
+                                  FROM users
+                                 WHERE user_name = ?
+                                   AND user_password = ?"/>
+    </bean>
+
 </beans>

@@ -34,4 +34,8 @@ public class MovieServiceImpl implements MovieService {
         return movie;
     }
 
+    public List<Genre> getGenresByMovieId(int movieId) {
+        return movieDao.getGenresByMovieId(movieId);
+    }
+
 }
