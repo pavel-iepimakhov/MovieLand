@@ -66,4 +66,11 @@
                                    AND user_password = ?"/>
     </bean>
 
+    <bean id="addMovieReviewSql" class="java.lang.String">
+        <constructor-arg value="INSERT INTO movie_reviews
+                                (movie_id, user_id, review_text)
+                                VALUES
+                                (?, ?, ?);"/>
+    </bean>
+
 </beans>

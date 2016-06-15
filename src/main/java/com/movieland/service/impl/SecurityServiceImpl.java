@@ -31,16 +31,19 @@ public class SecurityServiceImpl implements SecurityService {
         if(user != null) {
             token = tokenGeneratorService.getToken();
             tokenCache.put(token, user);
-            return token;
-        } else {
-            return token;
         }
+        return token;
     }
 
     @Override
     public boolean isSecurityTokenValid(String securityToken) {
         User user = tokenCache.getIfPresent(securityToken);
         return user != null;
+    }
+
+    @Override
+    public User getUserByToken(String securityToken) {
+        return tokenCache.getIfPresent(securityToken);
     }
 
 }

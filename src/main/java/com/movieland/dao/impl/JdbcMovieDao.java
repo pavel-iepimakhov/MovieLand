@@ -29,14 +29,10 @@ public class JdbcMovieDao implements MovieDao {
     private String getMovieByIdSql;
 
     @Autowired
-    private String getReviewsByMovieIdSql;
-
-    @Autowired
     private String getGenresByMovieIdSql;
 
     private MovieRowMapper movieRowMapper = new MovieRowMapper();
     private MoviesRowMapper moviesRowMapper = new MoviesRowMapper();
-    private MovieReviewRowMapper movieReviewRowMapper = new MovieReviewRowMapper();
     private GenreRowMapper genreRowMapper = new GenreRowMapper();
 
 
@@ -46,10 +42,6 @@ public class JdbcMovieDao implements MovieDao {
 
     public Movie getMovieById(int movieId) {
         return jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{movieId}, movieRowMapper);
-    }
-
-    public List<MovieReview> getReviewsByMovieId(int movieId) {
-        return jdbcTemplate.query(getReviewsByMovieIdSql, new Object[]{movieId}, movieReviewRowMapper);
     }
 
     public List<Genre> getGenresByMovieId(int movieId) {

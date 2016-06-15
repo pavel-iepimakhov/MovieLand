@@ -5,6 +5,7 @@ import com.movieland.entity.Genre;
 import com.movieland.entity.Movie;
 import com.movieland.entity.MovieReview;
 import com.movieland.service.MovieGenresCacheService;
+import com.movieland.service.MovieReviewService;
 import com.movieland.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     private MovieGenresCacheService movieGenresCacheService;
 
+    @Autowired
+    private MovieReviewService movieReviewService;
+
     public List<Movie> getAllMovies() {
         return movieDao.getAllMovies();
     }
@@ -27,7 +31,7 @@ public class MovieServiceImpl implements MovieService {
     public Movie getMovieById(int movieId)
     {
         Movie movie = movieDao.getMovieById(movieId);
-        List<MovieReview> reviews = movieDao.getReviewsByMovieId(movieId);
+        List<MovieReview> reviews = movieReviewService.getReviewsByMovieId(movieId);
         movie.setReviews(reviews);
         List<Genre> genres = movieGenresCacheService.getMovieGenres(movieId);
         movie.setGenres(genres);
