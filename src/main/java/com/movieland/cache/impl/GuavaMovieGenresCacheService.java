@@ -1,11 +1,10 @@
-package com.movieland.service.impl;
+package com.movieland.cache.impl;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.movieland.dao.MovieDao;
 import com.movieland.entity.Genre;
-import com.movieland.service.MovieGenresCacheService;
+import com.movieland.cache.MovieGenresCacheService;
 import com.movieland.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

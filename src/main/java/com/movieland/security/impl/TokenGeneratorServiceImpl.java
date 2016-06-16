@@ -1,7 +1,6 @@
-package com.movieland.service.impl;
+package com.movieland.security.impl;
 
-import com.movieland.entity.User;
-import com.movieland.service.TokenGeneratorService;
+import com.movieland.security.TokenGeneratorService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

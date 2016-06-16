@@ -1,10 +1,10 @@
-package com.movieland.service.impl;
+package com.movieland.security.impl;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.movieland.entity.User;
-import com.movieland.service.SecurityService;
-import com.movieland.service.TokenGeneratorService;
+import com.movieland.security.SecurityService;
+import com.movieland.security.TokenGeneratorService;
 import com.movieland.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,12 +33,6 @@ public class SecurityServiceImpl implements SecurityService {
             tokenCache.put(token, user);
         }
         return token;
-    }
-
-    @Override
-    public boolean isSecurityTokenValid(String securityToken) {
-        User user = tokenCache.getIfPresent(securityToken);
-        return user != null;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.movieland.service;
+package com.movieland.cache;
 
 import com.movieland.entity.Genre;
 

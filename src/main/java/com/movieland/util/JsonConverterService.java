@@ -1,4 +1,4 @@
-package com.movieland.service;
+package com.movieland.util;
 
 
 import java.util.Map;

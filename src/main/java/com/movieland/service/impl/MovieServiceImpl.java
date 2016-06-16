@@ -4,7 +4,7 @@ import com.movieland.dao.MovieDao;
 import com.movieland.entity.Genre;
 import com.movieland.entity.Movie;
 import com.movieland.entity.MovieReview;
-import com.movieland.service.MovieGenresCacheService;
+import com.movieland.cache.MovieGenresCacheService;
 import com.movieland.service.MovieReviewService;
 import com.movieland.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;

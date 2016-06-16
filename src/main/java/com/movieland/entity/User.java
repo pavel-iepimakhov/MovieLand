@@ -95,4 +95,12 @@ public class User {
         result = 31 * result + (userRole != null ? userRole.hashCode() : 0);
         return result;
     }
+
+    public boolean isUser() {
+        return "user".equals(getUserRole());
+    }
+
+    public boolean isAdmin() {
+        return "admin".equals(getUserRole());
+    }
 }

@@ -1,11 +1,11 @@
-package com.movieland.service.impl;
+package com.movieland.util.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.movieland.entity.Movie;
 import com.movieland.entity.adapter.MovieTypeAdapter;
-import com.movieland.service.JsonConverterService;
+import com.movieland.util.JsonConverterService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
