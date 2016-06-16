@@ -23,4 +23,9 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     public List<MovieReview> getReviewsByMovieId(int movieId) {
         return movieReviewDao.getReviewsByMovieId(movieId);
     }
+
+    @Override
+    public void removeMovieReview(int movieId, int userId) {
+        movieReviewDao.removeMovieReview(movieId, userId);
+    }
 }

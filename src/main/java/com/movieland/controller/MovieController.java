@@ -47,7 +47,7 @@ public class MovieController {
         return jsonConverterService.objectToJson(movie);
     }
 
-    @RequestMapping(value = "/v1/auth", consumes = "application/json", produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/auth", consumes = "application/json;charset=UTF-8", produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> getSecurityToken(@RequestBody String body) {
         Map<String,String> userPassMap = jsonConverterService.getStringMapFromJson(body);
@@ -62,11 +62,22 @@ public class MovieController {
     public ResponseEntity<String> addMovieReview(@RequestBody String body) {
         Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
         User user  = securityService.getUserByToken(request.get("token"));
-        if(user != null && user.getUserRole().equals("user")) {
+        if(user != null && user.getUserRole().equals("user") || user.getUserRole().equals("admin")) {
             movieReviewService.addReview(Integer.parseInt(request.get("movieid")), user.getUserId(), request.get("reviewtext"));
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
         else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    @RequestMapping(value = "/v1/review", consumes = "application/json", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<String> removeMoviewReview(@RequestBody String body) {
+        Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
+        User user  = securityService.getUserByToken(request.get("token"));
+        if(user != null && user.getUserRole().equals("user") || user.getUserRole().equals("admin")) {
+            movieReviewService.removeMovieReview(Integer.parseInt(request.get("movieid")), user.getUserId());
+        }
+        return null;
     }
 
 }
