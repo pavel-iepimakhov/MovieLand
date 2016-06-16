@@ -27,7 +27,7 @@ public class ReviewController {
     public ResponseEntity<String> addMovieReview(@RequestBody String body) {
         Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
         User user  = securityService.getUserByToken(request.get("token"));
-        if(user != null && user.isUser() || user.isAdmin()) {
+        if(user != null && (user.isUser() || user.isAdmin())) {
             movieReviewService.addReview(Integer.parseInt(request.get("movieid")), user.getUserId(), request.get("reviewtext"));
             return  new ResponseEntity<>(HttpStatus.OK);
         }
@@ -39,8 +39,8 @@ public class ReviewController {
     public ResponseEntity<String> removeMovieReview(@RequestBody String body) {
         Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
         User user  = securityService.getUserByToken(request.get("token"));
-        if(user != null && user.isUser() || user.isAdmin()) {
-            movieReviewService.removeMovieReview(Integer.parseInt(request.get("movieid")), user.getUserId());
+        if(user != null && (user.isUser() || user.isAdmin())) {
+            movieReviewService.removeMovieReview(Integer.parseInt(request.get("reviewid")));
         }
         return null;
     }

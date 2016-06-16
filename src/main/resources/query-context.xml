@@ -74,7 +74,7 @@
     </bean>
 
     <bean id="removeMovieReviewSql" class="java.lang.String">
-        <constructor-arg value="DELETE FROM movie_reviews WHERE movie_id = ? AND user_id = ?"/>
+        <constructor-arg value="DELETE FROM movie_reviews WHERE review_id = ?"/>
     </bean>
 
 </beans>

@@ -37,8 +37,8 @@ public class JdbcMovieReviewDao implements MovieReviewDao {
     }
 
     @Override
-    public void removeMovieReview(int movieId, int userId) {
-        jdbcTemplate.update(removeMovieReviewSql, movieId, userId);
+    public void removeMovieReview(int reviewId) {
+        jdbcTemplate.update(removeMovieReviewSql, reviewId);
     }
 
 }
