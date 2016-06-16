@@ -14,10 +14,9 @@ import java.util.Map;
 @Service
 public class GsonJsonConverterService implements JsonConverterService {
 
-    private GsonBuilder gsonBuilder = new GsonBuilder();
-
     private Gson gson;
     {
+        GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Movie.class , new MovieTypeAdapter());
         gson = gsonBuilder.create();
     }
