@@ -77,4 +77,12 @@
         <constructor-arg value="DELETE FROM movie_reviews WHERE review_id = ?"/>
     </bean>
 
+    <bean id="getMovieReviewByIdSql" class="java.lang.String">
+        <constructor-arg value="SELECT mr.movie_id, mr.review_id, mr.user_id, u.user_name, mr.review_text
+                                  FROM movie_reviews mr
+                                  JOIN users u
+                                    ON mr.user_id = u.user_id
+                                 WHERE mr.review_id = ?"/>
+    </bean>
+
 </beans>

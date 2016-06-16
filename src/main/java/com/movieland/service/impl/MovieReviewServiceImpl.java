@@ -28,4 +28,9 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     public void removeMovieReview(int reviewId) {
         movieReviewDao.removeMovieReview(reviewId);
     }
+
+    @Override
+    public MovieReview getMovieReviewById(int reviewId) {
+        return movieReviewDao.getMovieReviewById(reviewId);
+    }
 }
