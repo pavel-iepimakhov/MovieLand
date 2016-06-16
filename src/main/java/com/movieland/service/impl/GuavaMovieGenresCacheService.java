@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache;
 import com.movieland.dao.MovieDao;
 import com.movieland.entity.Genre;
 import com.movieland.service.MovieGenresCacheService;
+import com.movieland.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+// TODO: 16.06.2016 implement cusom cache
 @Service
 public class GuavaMovieGenresCacheService implements MovieGenresCacheService {
 
     @Autowired
-    private MovieDao movieDao;
+    private MovieService movieService;
 
     private LoadingCache<Integer, List<Genre>> movieGenresCache =
             CacheBuilder.newBuilder()
@@ -25,7 +27,7 @@ public class GuavaMovieGenresCacheService implements MovieGenresCacheService {
                     .build(new CacheLoader<Integer, List<Genre>>() {
                         @Override
                         public List<Genre> load(Integer movieId) throws Exception {
-                            return movieDao.getGenresByMovieId(movieId);
+                            return movieService.getGenresByMovieId(movieId);
                         }
                     });
 
@@ -34,7 +36,7 @@ public class GuavaMovieGenresCacheService implements MovieGenresCacheService {
         try {
             return movieGenresCache.get(movieId);
         } catch (ExecutionException e) {
-            return movieDao.getGenresByMovieId(movieId);
+            return movieService.getGenresByMovieId(movieId);
         }
     }
 }

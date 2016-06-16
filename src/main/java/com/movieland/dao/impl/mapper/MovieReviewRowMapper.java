@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
+// TODO: 16.06.2016 unit test
 public class MovieReviewRowMapper implements RowMapper<MovieReview> {
     public MovieReview mapRow(ResultSet resultSet, int i) throws SQLException {
         MovieReview movieReview = new MovieReview();

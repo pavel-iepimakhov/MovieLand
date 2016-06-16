@@ -11,12 +11,13 @@ import com.movieland.entity.Movie;
 import com.movieland.entity.MovieReview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
-@Service
+@Repository
 public class JdbcMovieDao implements MovieDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -28,14 +29,10 @@ public class JdbcMovieDao implements MovieDao {
     private String getMovieByIdSql;
 
     @Autowired
-    private String getReviewsByMovieIdSql;
-
-    @Autowired
     private String getGenresByMovieIdSql;
 
     private MovieRowMapper movieRowMapper = new MovieRowMapper();
     private MoviesRowMapper moviesRowMapper = new MoviesRowMapper();
-    private MovieReviewRowMapper movieReviewRowMapper = new MovieReviewRowMapper();
     private GenreRowMapper genreRowMapper = new GenreRowMapper();
 
 
@@ -44,18 +41,11 @@ public class JdbcMovieDao implements MovieDao {
     }
 
     public Movie getMovieById(int movieId) {
-        Movie movie = jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{movieId}, movieRowMapper);
-        return movie;
-    }
-
-    public List<MovieReview> getReviewsByMovieId(int movieId) {
-        List<MovieReview> movieReviews = jdbcTemplate.query(getReviewsByMovieIdSql, new Object[]{movieId}, movieReviewRowMapper);
-        return movieReviews;
+        return jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{movieId}, movieRowMapper);
     }
 
     public List<Genre> getGenresByMovieId(int movieId) {
-        List<Genre> movieGenres = jdbcTemplate.query(getGenresByMovieIdSql, new Object[]{movieId}, genreRowMapper);
-        return movieGenres;
+        return jdbcTemplate.query(getGenresByMovieIdSql, new Object[]{movieId}, genreRowMapper);
     }
 
 }
