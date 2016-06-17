@@ -2,6 +2,7 @@ package com.movieland.service.impl;
 
 import com.movieland.dao.MovieReviewDao;
 import com.movieland.entity.MovieReview;
+import com.movieland.entity.User;
 import com.movieland.service.MovieReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,16 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     @Override
-    public void removeMovieReview(int reviewId) {
-        movieReviewDao.removeMovieReview(reviewId);
+    public void removeMovieReview(int reviewId, User callingUser) {
+        MovieReview movieReview = getMovieReviewById(reviewId);
+        //user can only delete reviews he owns, admin can delete any review
+        if(callingUser.isAdmin() || (callingUser.isUser() && movieReview.getUser().getUserId() == callingUser.getUserId())) {
+            movieReviewDao.removeMovieReview(reviewId);
+        }
+    }
+
+    @Override
+    public MovieReview getMovieReviewById(int reviewId) {
+        return movieReviewDao.getMovieReviewById(reviewId);
     }
 }

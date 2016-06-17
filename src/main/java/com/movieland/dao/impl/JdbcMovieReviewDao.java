@@ -24,8 +24,10 @@ public class JdbcMovieReviewDao implements MovieReviewDao {
     @Autowired
     private String removeMovieReviewSql;
 
-    private MovieReviewRowMapper movieReviewRowMapper = new MovieReviewRowMapper();
+    @Autowired
+    private String getMovieReviewByIdSql;
 
+    private MovieReviewRowMapper movieReviewRowMapper = new MovieReviewRowMapper();
 
     @Override
     public void addReview(int movieId, int userId, String reviewText) {
@@ -39,6 +41,11 @@ public class JdbcMovieReviewDao implements MovieReviewDao {
     @Override
     public void removeMovieReview(int reviewId) {
         jdbcTemplate.update(removeMovieReviewSql, reviewId);
+    }
+
+    @Override
+    public MovieReview getMovieReviewById(int reviewId) {
+        return jdbcTemplate.queryForObject(getMovieReviewByIdSql, new Object[]{reviewId}, movieReviewRowMapper);
     }
 
 }

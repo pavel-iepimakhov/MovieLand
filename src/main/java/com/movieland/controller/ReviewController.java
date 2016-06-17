@@ -1,5 +1,6 @@
 package com.movieland.controller;
 
+import com.movieland.entity.MovieReview;
 import com.movieland.entity.User;
 import com.movieland.util.JsonConverterService;
 import com.movieland.service.MovieReviewService;
@@ -39,10 +40,13 @@ public class ReviewController {
     public ResponseEntity<String> removeMovieReview(@RequestBody String body) {
         Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
         User user  = securityService.getUserByToken(request.get("token"));
-        if(user != null && (user.isUser() || user.isAdmin())) {
-            movieReviewService.removeMovieReview(Integer.parseInt(request.get("reviewid")));
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        if(user != null) {
+            int reviewId = Integer.parseInt(request.get("reviewid"));
+            movieReviewService.removeMovieReview(reviewId, user);
+            httpStatus = HttpStatus.OK;
         }
-        return null;
+        return new ResponseEntity<>(httpStatus);
     }
 
 }

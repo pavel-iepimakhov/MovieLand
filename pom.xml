@@ -10,11 +10,72 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.2.6.RELEASE</spring.version>
+        <versions.jacoco>0.7.6.201602180812</versions.jacoco>
     </properties>
+
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.3</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <!--Restrict analysis to the given comma-separated list of classes and packages-->
+                    <!--<onlyAnalyze>com.example.*</onlyAnalyze>-->
+                    <plugins>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>LATEST</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.6</version>
+                <configuration>
+                    <!--A list of files to include into checking. Can contain Ant-style wildcards and double wildcards. Defaults to **/*.java.-->
+                    <!--<includes>
+                      <include>**/*Example.java</include>
+                    </includes>-->
+                    <!--A list of files to exclude from checking. Can contain Ant-style wildcards and double wildcards.-->
+                    <!--<excludes>
+                      <exclude>**/*Example.java</exclude>
+                    </excludes>-->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${versions.jacoco}</version>
+            </plugin>
+        </plugins>
+    </reporting>
 
     <build>
         <finalName>movieland</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${versions.jacoco}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.5.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -82,7 +143,12 @@
       <dependency>
           <groupId>ch.qos.logback</groupId>
           <artifactId>logback-classic</artifactId>
-          <version>1.1.2</version>
+          <version>1.1.7</version>
+      </dependency>
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+          <version>1.1.7</version>
       </dependency>
       <dependency>
           <groupId>org.slf4j</groupId>
