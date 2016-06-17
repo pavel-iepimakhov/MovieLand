@@ -43,12 +43,8 @@ public class ReviewController {
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
         if(user != null) {
             int reviewId = Integer.parseInt(request.get("reviewid"));
-            MovieReview movieReview = movieReviewService.getMovieReviewById(reviewId);
-            //user can only delete reviews he owns, admin can delete any review
-            if(user.isAdmin() || (user.isUser() && movieReview.getUser().getUserId() == user.getUserId())) {
-                movieReviewService.removeMovieReview(reviewId);
-                httpStatus = HttpStatus.OK;
-            }
+            movieReviewService.removeMovieReview(reviewId, user);
+            httpStatus = HttpStatus.OK;
         }
         return new ResponseEntity<>(httpStatus);
     }
