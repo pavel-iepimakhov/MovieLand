@@ -18,8 +18,29 @@
         </encoder>
     </appender>
 
-    <root level="debug">
+    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>smtp.gmail.com</smtpHost>
+        <smtpPort>465</smtpPort>
+        <SSL>true</SSL>
+        <username>movieland.bot@gmail.com</username>
+        <password>movielan</password>
+        <to>justletmeinemail@gmail.com</to>
+        <from>>movieland.bot@gmail.com</from>
+        <subject>TESTING: %logger{20} - %m</subject>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date %-5level %logger{35} - %message%n</pattern>
+        </layout>
+    </appender>
+
+
+    <root level="DEBUG">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="EMAIL" />
     </root>
 </configuration>
