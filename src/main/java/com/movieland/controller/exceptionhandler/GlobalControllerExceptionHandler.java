@@ -22,7 +22,6 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleAllExceptions(Exception e) {
         LOGGER.info("Exception occured: ", e);
-        ErrorMessage errorMessage = new ErrorMessage("Exception: " + e.getMessage());
-        return new ResponseEntity<String>(jsonConverterService.objectToJson(errorMessage), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(jsonConverterService.objectToJson(new ErrorMessage("Exception: " + e.getMessage())), HttpStatus.BAD_REQUEST);
     }
 }
