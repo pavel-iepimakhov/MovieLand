@@ -26,7 +26,7 @@ public class MovieController {
     @RequestMapping(value = "/v1/movies", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getAllMovies(){
-        LOGGER.info("getAllMovies");
+        LOGGER.info("Method getAllMovies was invoked");
         long startTime = 0;
         if(LOGGER.isDebugEnabled()) {
             startTime = System.nanoTime();

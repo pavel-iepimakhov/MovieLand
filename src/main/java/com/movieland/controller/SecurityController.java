@@ -26,7 +26,7 @@ public class SecurityController {
     @RequestMapping(value = "/v1/auth", consumes = "application/json;charset=UTF-8", produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> getSecurityToken(@RequestBody String body) {
-        LOGGER.info("getSecurityToken");
+        LOGGER.info("Method getSecurityToken was invoked");
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug("Request body is {}", body);
         }

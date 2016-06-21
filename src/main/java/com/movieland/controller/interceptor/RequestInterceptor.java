@@ -25,6 +25,11 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         String requestId = tokenGeneratorService.getToken();
         LOGGER.info("Request URI: {}",request.getRequestURI());
         MDC.put("requestId", requestId);
+        String securityToken = request.getHeader("Security-Token");
+        if(securityToken != null) {
+            User user = securityService.getUserByToken(securityToken);
+            MDC.put("userName", user.getUserName());
+        }
         return super.preHandle(request, response, handler);
     }
 
