@@ -26,6 +26,7 @@ public class MovieController {
     @RequestMapping(value = "/v1/movies", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getAllMovies(){
+        LOGGER.info("getAllMovies");
         long startTime = 0;
         if(LOGGER.isDebugEnabled()) {
             startTime = System.nanoTime();
@@ -43,6 +44,7 @@ public class MovieController {
     @RequestMapping(value = "/v1/movie/{movieId}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getMovieById(@PathVariable int movieId){
+        LOGGER.info("getMovieById {}", movieId);
         Movie movie = movieService.getMovieById(movieId);
         return jsonConverterService.objectToJson(movie);
     }

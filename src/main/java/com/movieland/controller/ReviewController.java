@@ -5,6 +5,8 @@ import com.movieland.entity.User;
 import com.movieland.util.JsonConverterService;
 import com.movieland.service.MovieReviewService;
 import com.movieland.security.SecurityService;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Controller
 public class ReviewController {
+
+    private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
+
     @Autowired
     private JsonConverterService jsonConverterService;
 
@@ -26,10 +32,18 @@ public class ReviewController {
 
     @RequestMapping(value = "/v1/review", consumes = "application/json", method = RequestMethod.POST)
     public ResponseEntity<String> addMovieReview(@RequestBody String body) {
+        LOGGER.info("addMovieReview");
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Request body is {}", body);
+        }
         Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
         User user  = securityService.getUserByToken(request.get("token"));
         if(user != null && (user.isUser() || user.isAdmin())) {
-            movieReviewService.addReview(Integer.parseInt(request.get("movieid")), user.getUserId(), request.get("reviewtext"));
+            MDC.put("userName", user.getUserName());
+            int movieId = Integer.parseInt(request.get("movieid"));
+            String reviewText = request.get("reviewtext");
+            LOGGER.info("addMovieReview movieId = {}, reviewText = {}", movieId, reviewText);
+            movieReviewService.addReview(movieId, user.getUserId(), reviewText);
             return  new ResponseEntity<>(HttpStatus.OK);
         }
         else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -38,11 +52,17 @@ public class ReviewController {
     @RequestMapping(value = "/v1/review", consumes = "application/json", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<String> removeMovieReview(@RequestBody String body) {
+        LOGGER.info("removeMovieReview");
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Request body is {}", body);
+        }
         Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
         User user  = securityService.getUserByToken(request.get("token"));
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
         if(user != null) {
+            MDC.put("userName", user.getUserName());
             int reviewId = Integer.parseInt(request.get("reviewid"));
+            LOGGER.info("removeMovieReview reviewId = {}",reviewId);
             movieReviewService.removeMovieReview(reviewId, user);
             httpStatus = HttpStatus.OK;
         }
