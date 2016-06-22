@@ -28,9 +28,9 @@ public class MovieServiceImpl implements MovieService {
         return movieDao.getAllMovies();
     }
 
-    public Movie getMovieById(int movieId)
+    public Movie getMovieById(int movieId, Integer userId)
     {
-        Movie movie = movieDao.getMovieById(movieId);
+        Movie movie = movieDao.getMovieById(movieId, userId);
         List<MovieReview> reviews = movieReviewService.getReviewsByMovieId(movieId);
         movie.setReviews(reviews);
         List<Genre> genres = movieGenresCacheService.getMovieGenres(movieId);

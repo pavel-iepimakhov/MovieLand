@@ -23,6 +23,7 @@ public class MovieTypeAdapter extends TypeAdapter<Movie> {
         if(movie.getMovieYear() != 0) jsonWriter.name("year").value(movie.getMovieYear());
         if(movie.getMovieDescription() != null) jsonWriter.name("description").value(movie.getMovieDescription());
         if(movie.getMovieRating() != 0) jsonWriter.name("rating").value(movie.getMovieRating());
+        if(movie.getUserRating() != 0) jsonWriter.name("your_rating").value(movie.getUserRating());
         if(movie.getMoviePrice() != 0) jsonWriter.name("price").value(movie.getMoviePrice());
         if(movie.getGenres() != null) jsonWriter.name("genres").value(StringUtils.arrayToCommaDelimitedString(movie.getGenres().toArray()));
         if(movie.getCountries() != null) jsonWriter.name("countries").value(StringUtils.arrayToCommaDelimitedString(movie.getCountries().toArray()));

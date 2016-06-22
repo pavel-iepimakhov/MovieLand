@@ -19,14 +19,17 @@
     </bean>
 
     <bean id="getMovieByIdSql" class="java.lang.String">
-        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, group_concat(DISTINCT c.country_name) countries
+        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year, m.movie_rating, mr.rating your_rating, group_concat(DISTINCT c.country_name) countries
                                   FROM movies m
                                   JOIN movie_countries mc
                                     ON mc.movie_id = m.movie_id
                                   JOIN countries c
                                     ON c.country_id = mc.country_id
+                                  LEFT JOIN movie_rating mr
+                                    ON m.movie_id = mr.movie_id
+                                   AND mr.user_id = ?
                                  WHERE m.movie_id = ?
-                                GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating"/>
+                                 GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating,mr.rating"/>
     </bean>
 
     <bean id="getReviewsByMovieIdSql" class="java.lang.String">
@@ -83,6 +86,13 @@
                                   JOIN users u
                                     ON mr.user_id = u.user_id
                                  WHERE mr.review_id = ?"/>
+    </bean>
+
+    <bean id="mergeUserMovieRatingSql" class="java.lang.String">
+        <constructor-arg value="INSERT OR REPLACE INTO movie_rating
+                                (movie_id, user_id, rating)
+                                VALUES
+                                (?, ?, ?)"/>
     </bean>
 
 </beans>
