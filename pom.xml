@@ -176,5 +176,12 @@
           <version>1.4.7</version>
       </dependency>
 
+      <dependency>
+          <groupId>org.modelmapper</groupId>
+          <artifactId>modelmapper</artifactId>
+          <version>0.7.6</version>
+      </dependency>
+
+
   </dependencies>
 </project>

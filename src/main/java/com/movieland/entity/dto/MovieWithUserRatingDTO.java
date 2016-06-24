@@ -1,8 +1,12 @@
-package com.movieland.entity;
+package com.movieland.entity.dto;
+
+import com.movieland.entity.Country;
+import com.movieland.entity.Genre;
+import com.movieland.entity.MovieReview;
 
 import java.util.List;
 
-public class Movie {
+public class MovieWithUserRatingDTO {
     private int movieId;
     private String movieNameEng;
     private String movieNameRus;
@@ -13,6 +17,15 @@ public class Movie {
     private List<MovieReview> reviews;
     private List<Genre> genres;
     private List<Country> countries;
+    private float userRating;
+
+    public float getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(float userRating) {
+        this.userRating = userRating;
+    }
 
     public int getMovieId() {
         return movieId;

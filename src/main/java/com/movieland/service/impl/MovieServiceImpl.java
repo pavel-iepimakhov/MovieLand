@@ -7,7 +7,10 @@ import com.movieland.entity.MovieReview;
 import com.movieland.cache.MovieGenresCacheService;
 import com.movieland.service.MovieReviewService;
 import com.movieland.service.MovieService;
+import com.movieland.util.CurrencyExchangeRateService;
+import com.movieland.util.ExchangeRate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +27,19 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     private MovieReviewService movieReviewService;
 
+    @Autowired
+    private CurrencyExchangeRateService currencyExchangeRateService;
+
+    @Override
     public List<Movie> getAllMovies() {
+        ExchangeRate exchangeRate = currencyExchangeRateService.getCurrencyExchangeRate("USD");
         return movieDao.getAllMovies();
     }
 
-    public Movie getMovieById(int movieId, Integer userId)
+    @Override
+    public Movie getMovieById(int movieId)
     {
-        Movie movie = movieDao.getMovieById(movieId, userId);
+        Movie movie = movieDao.getMovieById(movieId);
         List<MovieReview> reviews = movieReviewService.getReviewsByMovieId(movieId);
         movie.setReviews(reviews);
         List<Genre> genres = movieGenresCacheService.getMovieGenres(movieId);
@@ -38,8 +47,14 @@ public class MovieServiceImpl implements MovieService {
         return movie;
     }
 
+    @Override
     public List<Genre> getGenresByMovieId(int movieId) {
         return movieDao.getGenresByMovieId(movieId);
+    }
+
+    @Override
+    public void updateAverageMovieRating(int movieId) {
+        movieDao.updateAverageMovieRating(movieId);
     }
 
 }

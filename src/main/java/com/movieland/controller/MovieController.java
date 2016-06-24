@@ -2,12 +2,15 @@ package com.movieland.controller;
 
 import com.movieland.entity.Movie;
 import com.movieland.entity.User;
+import com.movieland.entity.dto.MovieWithUserRatingDTO;
 import com.movieland.security.SecurityService;
 import com.movieland.service.*;
 import com.movieland.util.JsonConverterService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +35,9 @@ public class MovieController {
     @Autowired
     private SecurityService securityService;
 
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
     @RequestMapping(value = "/v1/movies", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getAllMovies(){
@@ -54,15 +60,22 @@ public class MovieController {
     @ResponseBody
     public String getMovieById(@PathVariable int movieId, @RequestHeader(value="Security-Token", required = false) String securityToken){
         LOGGER.info("User called getMovieById for movie {}", movieId);
-        Integer userId = null;
+        Float userRating = null;
+        Object result = movieService.getMovieById(movieId);
         if(securityToken != null) {
             User user  = securityService.getUserByToken(securityToken);
             if(user != null) {
-                userId = user.getUserId();
+                int userId = user.getUserId();
+                userRating = movieRatingService.getUserMovieRating(movieId, userId);
+                if(userRating != null) {
+                    ModelMapper modelMapper = new ModelMapper();
+                    MovieWithUserRatingDTO movieWithUserRatingDTO = modelMapper.map(result, MovieWithUserRatingDTO.class);
+                    movieWithUserRatingDTO.setUserRating(userRating);
+                    result = movieWithUserRatingDTO;
+                }
             }
         }
-        Movie movie = movieService.getMovieById(movieId, userId);
-        return jsonConverterService.objectToJson(movie);
+        return jsonConverterService.objectToJson(result);
     }
 
     @RequestMapping(value = "/v1/movie/rate", consumes = "application/json;charset=UTF-8", method = RequestMethod.POST)
@@ -76,6 +89,7 @@ public class MovieController {
             int userId = user.getUserId();
             LOGGER.info("User {} called mergeUserMovieRating method to add/change rating {} for movie {}", userId, rating, movieId);
             movieRatingService.mergeUserMovieRating(movieId, userId, rating);
+            threadPoolTaskExecutor.execute(() -> movieService.updateAverageMovieRating(movieId));
         }
         return null;
     }

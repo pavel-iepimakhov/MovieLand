@@ -31,21 +31,32 @@ public class JdbcMovieDao implements MovieDao {
     @Autowired
     private String getGenresByMovieIdSql;
 
+    @Autowired
+    private String updateAverageMovieRatingSql;
+
     private MovieRowMapper movieRowMapper = new MovieRowMapper();
     private MoviesRowMapper moviesRowMapper = new MoviesRowMapper();
     private GenreRowMapper genreRowMapper = new GenreRowMapper();
 
 
+    @Override
     public List<Movie> getAllMovies() {
         return jdbcTemplate.query(getAllMoviesSql, moviesRowMapper);
     }
 
-    public Movie getMovieById(int movieId, Integer userId) {
-        return jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{userId, movieId}, movieRowMapper);
+    @Override
+    public Movie getMovieById(int movieId) {
+        return jdbcTemplate.queryForObject(getMovieByIdSql, new Object[]{movieId}, movieRowMapper);
     }
 
+    @Override
     public List<Genre> getGenresByMovieId(int movieId) {
         return jdbcTemplate.query(getGenresByMovieIdSql, new Object[]{movieId}, genreRowMapper);
+    }
+
+    @Override
+    public void updateAverageMovieRating(int movieId) {
+        jdbcTemplate.update(updateAverageMovieRatingSql, movieId);
     }
 
 }
