@@ -106,11 +106,11 @@ public class MovieController {
         return null;
     }
 
-    @RequestMapping(value = "/v1/poster/{movieId}", method = RequestMethod.GET, produces = "image/jpeg;charset=UTF-8")
+    @RequestMapping(value = "/v1/poster/{movieId}", method = RequestMethod.GET, produces = "image/jpeg")
     @ResponseBody
-    public ResponseEntity<byte[]> getMoviePoster(@PathVariable int movieId) {
+    public byte[] getMoviePoster(@PathVariable int movieId) {
         Poster poster = moviePosterService.getMoviePoster(movieId);
-        return new ResponseEntity<>(poster.getPosterImage(), HttpStatus.OK);
+        return poster.getPosterImage();
     }
 
 }
