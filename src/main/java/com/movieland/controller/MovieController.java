@@ -1,6 +1,7 @@
 package com.movieland.controller;
 
 import com.movieland.entity.Movie;
+import com.movieland.entity.Poster;
 import com.movieland.entity.User;
 import com.movieland.entity.dto.MovieWithUserRatingDTO;
 import com.movieland.security.SecurityService;
@@ -14,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -47,14 +50,17 @@ public class MovieController {
     @Autowired
     private CurrencyExchangeRateService currencyExchangeRateService;
 
+    @Autowired
+    private MoviePosterService moviePosterService;
+
     @RequestMapping(value = "/v1/movies", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getAllMovies(@RequestParam(required = false) CurrencyEnum currency){
         LOGGER.info("Method getAllMovies was invoked" + currency != null ? ". Currency parameter is " + currency : null);
         List<Movie> movies = movieService.getAllMovies();
 
-        //perform currency convertion in case currency request parameter has been specified
-        if(currency != null) {
+        //perform currency convertion in case USD or EUR currency request parameter has been specified.
+        if(currency != null && currency != CurrencyEnum.UAH ) {
             ExchangeRate exchangeRate = currencyExchangeRateService.getCurrencyExchangeRate(currency);
             float rate = exchangeRate.getRate();
             movies.forEach((movie) -> movie.setMoviePrice(Precision.round(movie.getMoviePrice() / rate, 2)));
@@ -98,6 +104,13 @@ public class MovieController {
             threadPoolTaskExecutor.execute(() -> movieService.updateAverageMovieRating(movieId));
         }
         return null;
+    }
+
+    @RequestMapping(value = "/v1/poster/{movieId}", method = RequestMethod.GET, produces = "image/jpeg;charset=UTF-8")
+    @ResponseBody
+    public ResponseEntity<byte[]> getMoviePoster(@PathVariable int movieId) {
+        Poster poster = moviePosterService.getMoviePoster(movieId);
+        return new ResponseEntity<>(poster.getPosterImage(), HttpStatus.OK);
     }
 
 }

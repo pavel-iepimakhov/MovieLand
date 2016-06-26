@@ -107,4 +107,12 @@
                                  WHERE movie_id = ?"/>
     </bean>
 
+    <bean id="getMoviePosterSql" class="java.lang.String">
+        <constructor-arg value="SELECT poster_id,
+                                       movie_id,
+                                       poster_image
+                                  FROM movie_posters
+                                 WHERE movie_id = ?"/>
+    </bean>
+
 </beans>
