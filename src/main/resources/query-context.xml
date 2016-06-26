@@ -5,7 +5,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="getAllMoviesSql" class="java.lang.String">
-        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, group_concat(DISTINCT g.genre_name) genres, group_concat(DISTINCT c.country_name) countries
+        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, m.movie_price, group_concat(DISTINCT g.genre_name) genres, group_concat(DISTINCT c.country_name) countries
                                   FROM movies m
                                   JOIN movie_genres mg
                                     ON m.movie_id = mg.movie_id
@@ -15,7 +15,7 @@
                                     ON mc.movie_id = m.movie_id
                                   JOIN countries c
                                     ON c.country_id = mc.country_id
-                                GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating"/>
+                                GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating,m.movie_price"/>
     </bean>
 
     <bean id="getMovieByIdSql" class="java.lang.String">

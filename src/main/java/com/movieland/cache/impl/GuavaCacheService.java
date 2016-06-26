@@ -4,8 +4,11 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.movieland.entity.Genre;
-import com.movieland.cache.MovieGenresCacheService;
+import com.movieland.cache.CacheService;
 import com.movieland.service.MovieService;
+import com.movieland.util.CurrencyEnum;
+import com.movieland.util.CurrencyExchangeRateService;
+import com.movieland.util.ExchangeRate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +18,13 @@ import java.util.concurrent.TimeUnit;
 
 // TODO: 16.06.2016 implement custom cache
 @Service
-public class GuavaMovieGenresCacheService implements MovieGenresCacheService {
+public class GuavaCacheService implements CacheService {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private CurrencyExchangeRateService currencyExchangeRateService;
 
     private LoadingCache<Integer, List<Genre>> movieGenresCache =
             CacheBuilder.newBuilder()
@@ -30,12 +36,32 @@ public class GuavaMovieGenresCacheService implements MovieGenresCacheService {
                         }
                     });
 
+    private LoadingCache<CurrencyEnum, ExchangeRate> currencyExchangeRateCache =
+            CacheBuilder.newBuilder()
+                    .expireAfterWrite(10, TimeUnit.MINUTES)
+                    .build(new CacheLoader<CurrencyEnum, ExchangeRate>() {
+                        @Override
+                        public ExchangeRate load(CurrencyEnum currencyEnum) throws Exception {
+                            return currencyExchangeRateService.fetchCurrencyExchangeRate(currencyEnum);
+                        }
+                    });
+
     @Override
     public List<Genre> getMovieGenres(int movieId) {
         try {
             return movieGenresCache.get(movieId);
         } catch (ExecutionException e) {
             return movieService.getGenresByMovieId(movieId);
+        }
+    }
+
+    @Override
+    public ExchangeRate getExchangeRateForCurrency(CurrencyEnum currency) {
+        try{
+            ExchangeRate rate = currencyExchangeRateCache.get(currency);
+            return rate;
+        } catch (ExecutionException e) {
+            return null;
         }
     }
 }
