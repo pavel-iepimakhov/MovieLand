@@ -9,4 +9,5 @@ import java.util.List;
 public interface CacheService {
     List<Genre> getMovieGenres(int movieId);
     ExchangeRate getExchangeRateForCurrency(CurrencyEnum currency);
+    void invalidateAllCaches();
 }
