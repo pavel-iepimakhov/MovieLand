@@ -3,16 +3,13 @@ package com.movieland.dao.impl;
 
 import com.movieland.dao.MovieDao;
 import com.movieland.dao.impl.mapper.GenreRowMapper;
-import com.movieland.dao.impl.mapper.MovieReviewRowMapper;
 import com.movieland.dao.impl.mapper.MovieRowMapper;
 import com.movieland.dao.impl.mapper.MoviesRowMapper;
 import com.movieland.entity.Genre;
 import com.movieland.entity.Movie;
-import com.movieland.entity.MovieReview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
