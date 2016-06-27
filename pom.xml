@@ -121,17 +121,18 @@
       <version>3.8.11.2</version>
     </dependency>
       <!--Test-->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-    </dependency>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.11</version>
+        </dependency>
 
       <dependency>
           <groupId>org.mockito</groupId>
           <artifactId>mockito-all</artifactId>
           <version>1.9.5</version>
       </dependency>
+
       <!--JSON-->
       <dependency>
           <groupId>com.google.code.gson</groupId>
@@ -139,6 +140,7 @@
           <version>2.6.2</version>
           <scope>compile</scope>
       </dependency>
+
       <!-- Logs -->
       <dependency>
           <groupId>ch.qos.logback</groupId>
@@ -155,6 +157,7 @@
           <artifactId>jcl-over-slf4j</artifactId>
           <version>1.7.7</version>
       </dependency>
+
       <!--Cache-->
       <dependency>
           <groupId>com.google.guava</groupId>
@@ -175,6 +178,21 @@
           <artifactId>mail</artifactId>
           <version>1.4.7</version>
       </dependency>
+
+      <!--ModelMapper-->
+      <dependency>
+          <groupId>org.modelmapper</groupId>
+          <artifactId>modelmapper</artifactId>
+          <version>0.7.6</version>
+      </dependency>
+
+      <!--Apache Commons Math (for price rounding)-->
+      <dependency>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-math3</artifactId>
+          <version>3.2</version>
+      </dependency>
+
 
   </dependencies>
 </project>

@@ -13,15 +13,6 @@ public class Movie {
     private List<MovieReview> reviews;
     private List<Genre> genres;
     private List<Country> countries;
-    private float userRating;
-
-    public float getUserRating() {
-        return userRating;
-    }
-
-    public void setUserRating(float userRating) {
-        this.userRating = userRating;
-    }
 
     public int getMovieId() {
         return movieId;

@@ -1,5 +1,6 @@
 package com.movieland.util;
 
 public interface CurrencyExchangeRateService {
-    ExchangeRate getCurrencyExchangeRate(String currencyCode);
+    ExchangeRate getCurrencyExchangeRate(CurrencyEnum currencyCode);
+    ExchangeRate fetchCurrencyExchangeRate(CurrencyEnum currencyCode);
 }
