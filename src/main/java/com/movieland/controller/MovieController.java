@@ -20,7 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.IOUtils;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -106,11 +110,22 @@ public class MovieController {
         return null;
     }
 
+//    @RequestMapping(value = "/v1/poster/{movieId}", method = RequestMethod.GET, produces = "image/jpeg")
+//    @ResponseBody
+//    public byte[] getMoviePoster(@PathVariable int movieId) {
+//        Poster poster = moviePosterService.getMoviePoster(movieId);
+//        return poster.getPosterImage();
+//    }
+
     @RequestMapping(value = "/v1/poster/{movieId}", method = RequestMethod.GET, produces = "image/jpeg")
-    @ResponseBody
-    public byte[] getMoviePoster(@PathVariable int movieId) {
+    public void getMoviePoster(@PathVariable int movieId, HttpServletResponse httpServletResponse) throws IOException {
         Poster poster = moviePosterService.getMoviePoster(movieId);
-        return poster.getPosterImage();
+        httpServletResponse.setContentType("image/jpeg");
+        httpServletResponse.setContentLength(poster.getPosterImage().length);
+        ServletOutputStream responseOutputStream = httpServletResponse.getOutputStream();
+        responseOutputStream.write(poster.getPosterImage());
+        responseOutputStream.flush();
+        responseOutputStream.close();
     }
 
 }
