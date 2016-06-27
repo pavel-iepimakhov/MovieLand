@@ -15,16 +15,11 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import sun.misc.IOUtils;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -75,10 +70,21 @@ public class MovieController {
 
     @RequestMapping(value = "/v1/movie/{movieId}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String getMovieById(@PathVariable int movieId, @RequestHeader(value="Security-Token", required = false) String securityToken){
+    public String getMovieById(@PathVariable int movieId,
+                               @RequestHeader(value="Security-Token", required = false) String securityToken,
+                               @RequestParam(required = false) CurrencyEnum currency){
         LOGGER.info("User called getMovieById for movie {}", movieId);
         Float userRating;
-        Object result = movieService.getMovieById(movieId);
+        Movie movie = movieService.getMovieById(movieId);
+
+        //perform currency convertion in case USD or EUR currency request parameter has been specified.
+        if(currency != null && currency != CurrencyEnum.UAH ) {
+            ExchangeRate exchangeRate = currencyExchangeRateService.getCurrencyExchangeRate(currency);
+            float rate = exchangeRate.getRate();
+            movie.setMoviePrice(Precision.round(movie.getMoviePrice() / rate, 2));
+        }
+
+        Object result = movie;
         if(securityToken != null) {
             User user  = securityService.getUserByToken(securityToken);
             if(user != null) {
@@ -95,8 +101,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/v1/movie/rate", consumes = "application/json;charset=UTF-8", method = RequestMethod.POST)
-    @ResponseBody
-    public String mergeUserMovieRating(@RequestHeader(value="Security-Token") String securityToken, @RequestBody String body){
+    public void mergeUserMovieRating(@RequestHeader(value="Security-Token") String securityToken, @RequestBody String body){
         Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
         int movieId = Integer.parseInt(request.get("movieid"));
         float rating = Float.parseFloat(request.get("rating"));
@@ -107,25 +112,14 @@ public class MovieController {
             movieRatingService.mergeUserMovieRating(movieId, userId, rating);
             threadPoolTaskExecutor.execute(() -> movieService.updateAverageMovieRating(movieId));
         }
-        return null;
     }
-
-//    @RequestMapping(value = "/v1/poster/{movieId}", method = RequestMethod.GET, produces = "image/jpeg")
-//    @ResponseBody
-//    public byte[] getMoviePoster(@PathVariable int movieId) {
-//        Poster poster = moviePosterService.getMoviePoster(movieId);
-//        return poster.getPosterImage();
-//    }
 
     @RequestMapping(value = "/v1/poster/{movieId}", method = RequestMethod.GET, produces = "image/jpeg")
-    public void getMoviePoster(@PathVariable int movieId, HttpServletResponse httpServletResponse) throws IOException {
+    @ResponseBody
+    public byte[] getMoviePoster(@PathVariable int movieId) {
         Poster poster = moviePosterService.getMoviePoster(movieId);
-        httpServletResponse.setContentType("image/jpeg");
-        httpServletResponse.setContentLength(poster.getPosterImage().length);
-        ServletOutputStream responseOutputStream = httpServletResponse.getOutputStream();
-        responseOutputStream.write(poster.getPosterImage());
-        responseOutputStream.flush();
-        responseOutputStream.close();
+        return poster.getPosterImage();
     }
+
 
 }
