@@ -13,7 +13,7 @@ public class CacheJMXControl {
     @Autowired
     private CacheService cacheService;
 
-    @ManagedOperation(description = "Invalidate cache")
+    @ManagedOperation(description = "Invalidate genres cache")
     public void invalidateGenresCache() {
         cacheService.invalidateGenresCache();
     }
