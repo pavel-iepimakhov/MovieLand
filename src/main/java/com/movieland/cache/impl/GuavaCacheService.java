@@ -3,7 +3,6 @@ package com.movieland.cache.impl;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.movieland.controller.MovieController;
 import com.movieland.entity.Genre;
 import com.movieland.cache.CacheService;
 import com.movieland.service.MovieService;
@@ -71,9 +70,15 @@ public class GuavaCacheService implements CacheService {
     }
 
     @Override
-    public void invalidateAllCaches() {
-        LOGGER.info("Invalidating all caches...");
+    public void invalidateGenresCache() {
+        LOGGER.info("Invalidating movie genres cache...");
         movieGenresCache.invalidateAll();
+    }
+
+    @Override
+    public void invalidateExchangeRatesCache() {
+        LOGGER.info("Invalidating currency exchange rates cache...");
         currencyExchangeRateCache.invalidateAll();
     }
+
 }

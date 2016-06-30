@@ -13,6 +13,8 @@
         <context:exclude-filter type="regex" expression="com\.movieland\.controller\..*" />
     </context:component-scan>
 
+    <context:mbean-export/>
+
     <context:property-placeholder location="classpath:jdbc.properties" />
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

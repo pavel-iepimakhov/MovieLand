@@ -8,7 +8,6 @@ import com.movieland.util.ExchangeRate;
 import com.movieland.util.JsonConverterService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
