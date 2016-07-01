@@ -3,6 +3,7 @@ package com.movieland.controller;
 import com.movieland.entity.MovieReview;
 import com.movieland.entity.User;
 import com.movieland.entity.request.AddMovieReviewRequest;
+import com.movieland.entity.request.RemoveMovieReviewRequest;
 import com.movieland.util.JsonConverterService;
 import com.movieland.service.MovieReviewService;
 import com.movieland.security.SecurityService;
@@ -49,17 +50,13 @@ public class ReviewController {
     @RequestMapping(value = "/v1/review", consumes = "application/json", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<String> removeMovieReview(@RequestBody String body, @RequestHeader(value="Security-Token") String securityToken) {
-        LOGGER.info("Method removeMovieReview was invoked");
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Request body is {}", body);
-        }
-        Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
+        RemoveMovieReviewRequest request = jsonConverterService.jsonToObject(body, RemoveMovieReviewRequest.class);
         User user  = securityService.getUserByToken(securityToken);
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
         if(user != null) {
             MDC.put("userName", user.getUserName());
-            int reviewId = Integer.parseInt(request.get("reviewid"));
-            LOGGER.info("reviewId = {}",reviewId);
+            int reviewId = request.getReviewId();
+            LOGGER.info("Method removeMovieReview was invoked. reviewId = {}, userName = {}",reviewId, user.getUserName());
             movieReviewService.removeMovieReview(reviewId, user);
             httpStatus = HttpStatus.OK;
         }
