@@ -5,6 +5,7 @@ public class Poster {
     private int movieId;
     private byte[] posterImage;
 
+
     public int getPosterId() {
         return posterId;
     }

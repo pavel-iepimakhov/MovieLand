@@ -20,7 +20,7 @@ public class JdbcMoviePosterDao implements MoviePosterDao {
 
     @Override
     public Poster getMoviePoster(int movieId) {
-        Poster poster = jdbcTemplate.queryForObject(getMoviePosterSql, moviePosterRowMapper,  new Object[] {movieId});
+        Poster poster = jdbcTemplate.queryForObject(getMoviePosterSql, moviePosterRowMapper, movieId);
         return poster;
     }
 }

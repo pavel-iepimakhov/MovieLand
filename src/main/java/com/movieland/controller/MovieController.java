@@ -4,6 +4,7 @@ import com.movieland.entity.Movie;
 import com.movieland.entity.Poster;
 import com.movieland.entity.User;
 import com.movieland.entity.dto.MovieWithUserRatingDTO;
+import com.movieland.entity.request.MergeMovieRatingRequest;
 import com.movieland.security.SecurityService;
 import com.movieland.service.*;
 import com.movieland.util.CurrencyEnum;
@@ -54,12 +55,12 @@ public class MovieController {
 
     @RequestMapping(value = "/v1/movies", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String getAllMovies(@RequestParam(required = false) CurrencyEnum currency){
+    public String getAllMovies(@RequestParam(required = false) CurrencyEnum currency) {
         LOGGER.info("Method getAllMovies was invoked" + currency != null ? ". Currency parameter is " + currency : null);
         List<Movie> movies = movieService.getAllMovies();
 
         //perform currency convertion in case USD or EUR currency request parameter has been specified.
-        if(currency != null && currency != CurrencyEnum.UAH ) {
+        if (currency != null && currency != CurrencyEnum.UAH) {
             ExchangeRate exchangeRate = currencyExchangeRateService.getCurrencyExchangeRate(currency);
             float rate = exchangeRate.getRate();
             movies.forEach((movie) -> movie.setMoviePrice(Precision.round(movie.getMoviePrice() / rate, 2)));
@@ -71,26 +72,26 @@ public class MovieController {
     @RequestMapping(value = "/v1/movie/{movieId}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getMovieById(@PathVariable int movieId,
-                               @RequestHeader(value="Security-Token", required = false) String securityToken,
-                               @RequestParam(required = false) CurrencyEnum currency){
+                               @RequestHeader(value = "Security-Token", required = false) String securityToken,
+                               @RequestParam(required = false) CurrencyEnum currency) {
         LOGGER.info("User called getMovieById for movie {}", movieId);
         Float userRating;
         Movie movie = movieService.getMovieById(movieId);
 
         //perform currency convertion in case USD or EUR currency request parameter has been specified.
-        if(currency != null && currency != CurrencyEnum.UAH ) {
+        if (currency != null && currency != CurrencyEnum.UAH) {
             ExchangeRate exchangeRate = currencyExchangeRateService.getCurrencyExchangeRate(currency);
             float rate = exchangeRate.getRate();
             movie.setMoviePrice(Precision.round(movie.getMoviePrice() / rate, 2));
         }
 
         Object result = movie;
-        if(securityToken != null) {
-            User user  = securityService.getUserByToken(securityToken);
-            if(user != null) {
+        if (securityToken != null) {
+            User user = securityService.getUserByToken(securityToken);
+            if (user != null) {
                 int userId = user.getUserId();
                 userRating = movieRatingService.getUserMovieRating(movieId, userId);
-                if(userRating != null) {
+                if (userRating != null) {
                     MovieWithUserRatingDTO movieWithUserRatingDTO = modelMapper.map(result, MovieWithUserRatingDTO.class);
                     movieWithUserRatingDTO.setUserRating(userRating);
                     result = movieWithUserRatingDTO;
@@ -101,12 +102,12 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/v1/movie/rate", consumes = "application/json;charset=UTF-8", method = RequestMethod.POST)
-    public void mergeUserMovieRating(@RequestHeader(value="Security-Token") String securityToken, @RequestBody String body){
-        Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
-        int movieId = Integer.parseInt(request.get("movieid"));
-        float rating = Float.parseFloat(request.get("rating"));
-        User user  = securityService.getUserByToken(securityToken);
-        if(user != null && (user.isUser() || user.isAdmin())) {
+    public void mergeUserMovieRating(@RequestHeader(value = "Security-Token") String securityToken, @RequestBody String body) {
+        MergeMovieRatingRequest request = jsonConverterService.jsonToObject(body, MergeMovieRatingRequest.class);
+        int movieId = request.getMovieId();
+        float rating = request.getRating();
+        User user = securityService.getUserByToken(securityToken);
+        if (user != null && (user.isUser() || user.isAdmin())) {
             int userId = user.getUserId();
             LOGGER.info("User {} called mergeUserMovieRating method to add/change rating {} for movie {}", userId, rating, movieId);
             movieRatingService.mergeUserMovieRating(movieId, userId, rating);
