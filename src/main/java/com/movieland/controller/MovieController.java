@@ -11,16 +11,15 @@ import com.movieland.util.CurrencyEnum;
 import com.movieland.util.CurrencyExchangeRateService;
 import com.movieland.util.ExchangeRate;
 import com.movieland.util.JsonConverterService;
-import org.apache.commons.math3.util.Precision;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -42,9 +41,6 @@ public class MovieController {
     private SecurityService securityService;
 
     @Autowired
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
-
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -56,16 +52,15 @@ public class MovieController {
     @RequestMapping(value = "/v1/movies", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getAllMovies(@RequestParam(required = false) CurrencyEnum currency) {
-        LOGGER.info("Method getAllMovies was invoked" + currency != null ? ". Currency parameter is " + currency : null);
+        LOGGER.info("Method getAllMovies was invoked" + (currency != null ? ". Currency parameter is " + currency : null));
         List<Movie> movies = movieService.getAllMovies();
 
         //perform currency convertion in case USD or EUR currency request parameter has been specified.
         if (currency != null && currency != CurrencyEnum.UAH) {
             ExchangeRate exchangeRate = currencyExchangeRateService.getCurrencyExchangeRate(currency);
             float rate = exchangeRate.getRate();
-            movies.forEach((movie) -> movie.setMoviePrice(Precision.round(movie.getMoviePrice() / rate, 2)));
+            movies.forEach(movie -> movie.setMoviePrice(new BigDecimal(Double.toString(movie.getMoviePrice() / rate)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
         }
-
         return jsonConverterService.objectToJson(movies);
     }
 
@@ -82,7 +77,7 @@ public class MovieController {
         if (currency != null && currency != CurrencyEnum.UAH) {
             ExchangeRate exchangeRate = currencyExchangeRateService.getCurrencyExchangeRate(currency);
             float rate = exchangeRate.getRate();
-            movie.setMoviePrice(Precision.round(movie.getMoviePrice() / rate, 2));
+            movie.setMoviePrice(new BigDecimal(Double.toString(movie.getMoviePrice() / rate)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
 
         Object result = movie;
@@ -111,7 +106,6 @@ public class MovieController {
             int userId = user.getUserId();
             LOGGER.info("User {} called mergeUserMovieRating method to add/change rating {} for movie {}", userId, rating, movieId);
             movieRatingService.mergeUserMovieRating(movieId, userId, rating);
-            threadPoolTaskExecutor.execute(() -> movieService.updateAverageMovieRating(movieId));
         }
     }
 

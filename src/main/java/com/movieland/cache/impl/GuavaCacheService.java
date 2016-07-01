@@ -65,6 +65,7 @@ public class GuavaCacheService implements CacheService {
             ExchangeRate rate = currencyExchangeRateCache.get(currency);
             return rate;
         } catch (ExecutionException e) {
+            LOGGER.info("Exception was caught during fetch from currency exchange rate service :" + e);
             return null;
         }
     }

@@ -16,9 +16,13 @@ public class MovieRatingServiceImpl implements MovieRatingService {
     @Autowired
     private MovieService movieService;
 
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
     @Override
     public void mergeUserMovieRating(int movieId, int userId, float rating) {
         movieRatingDao.mergeUserMovieRating(movieId, userId, rating);
+        threadPoolTaskExecutor.execute(() -> movieService.updateAverageMovieRating(movieId));
     }
 
     @Override

@@ -8,15 +8,20 @@ import com.movieland.util.ExchangeRate;
 import com.movieland.util.JsonConverterService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Service
 public class NBUCurrencyExchangeRateService implements CurrencyExchangeRateService {
+
+    @Value("${currency.url}")
+    private String url;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -36,12 +41,11 @@ public class NBUCurrencyExchangeRateService implements CurrencyExchangeRateServi
         return exchangeRate;
     }
 
+
     public ExchangeRate fetchCurrencyExchangeRate(CurrencyEnum currencyCode) {
         ExchangeRate exchangeRate = null;
         String todayBasicISO = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
-        // TODO: 26.06.2016 move url to params
-        String queryString = "http://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?valcode="
-                + currencyCode + "&date=" + todayBasicISO + "&json";
+        String queryString = MessageFormat.format(url, currencyCode, todayBasicISO);
         String response = restTemplate.getForObject(queryString, String.class);
         ArrayList<ExchangeRate> parseResult = jsonConverterService.jsonToObject(response, ArrayList.class);
         if(parseResult != null && !parseResult.isEmpty()) {
