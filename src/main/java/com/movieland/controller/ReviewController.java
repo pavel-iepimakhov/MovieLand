@@ -2,6 +2,7 @@ package com.movieland.controller;
 
 import com.movieland.entity.MovieReview;
 import com.movieland.entity.User;
+import com.movieland.entity.request.AddMovieReviewRequest;
 import com.movieland.util.JsonConverterService;
 import com.movieland.service.MovieReviewService;
 import com.movieland.security.SecurityService;
@@ -32,16 +33,12 @@ public class ReviewController {
 
     @RequestMapping(value = "/v1/review", consumes = "application/json", method = RequestMethod.POST)
     public ResponseEntity<String> addMovieReview(@RequestBody String body, @RequestHeader(value="Security-Token") String securityToken) {
-        LOGGER.info("addMovieReview");
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Request body is {}", body);
-        }
-        Map<String,String> request = jsonConverterService.getStringMapFromJson(body);
+        AddMovieReviewRequest request = jsonConverterService.jsonToObject(body, AddMovieReviewRequest.class);
         User user  = securityService.getUserByToken(securityToken);
         if(user != null && (user.isUser() || user.isAdmin())) {
             MDC.put("userName", user.getUserName());
-            int movieId = Integer.parseInt(request.get("movieid"));
-            String reviewText = request.get("reviewtext");
+            int movieId = request.getMovieId();
+            String reviewText = request.getReviewText();
             LOGGER.info("addMovieReview movieId = {}, reviewText = {}", movieId, reviewText);
             movieReviewService.addReview(movieId, user.getUserId(), reviewText);
             return  new ResponseEntity<>(HttpStatus.OK);
