@@ -28,6 +28,11 @@ public class GsonJsonConverterService implements JsonConverterService {
     }
 
     @Override
+    public <T> T jsonToObject(String json, Class<T> clazz) {
+        return gson.fromJson(json, clazz);
+    }
+
+    @Override
     public Map<String, String> getStringMapFromJson(String json) {
         return gson.fromJson(json, new TypeToken<HashMap<String, String>>(){}.getType());
     }

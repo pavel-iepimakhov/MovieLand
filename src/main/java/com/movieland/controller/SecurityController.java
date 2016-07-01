@@ -1,5 +1,6 @@
 package com.movieland.controller;
 
+import com.movieland.entity.request.GetSecurityTokenRequest;
 import com.movieland.util.JsonConverterService;
 import com.movieland.security.SecurityService;
 import org.slf4j.LoggerFactory;
@@ -26,13 +27,11 @@ public class SecurityController {
     @RequestMapping(value = "/v1/auth", consumes = "application/json;charset=UTF-8", produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> getSecurityToken(@RequestBody String body) {
-        LOGGER.info("Method getSecurityToken was invoked");
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Request body is {}", body);
-        }
-        Map<String,String> userPassMap = jsonConverterService.getStringMapFromJson(body);
-        String userName = userPassMap.get("username");
-        String token = securityService.getSecurityToken(userName, userPassMap.get("password"));
+        GetSecurityTokenRequest request = jsonConverterService.jsonToObject(body, GetSecurityTokenRequest.class);
+        String userName = request.getUserName();
+        String userPassword = request.getUserPassword();
+        LOGGER.info("Method getSecurityToken was invoked for user {}", userName);
+        String token = securityService.getSecurityToken(userName, userPassword);
         if(token != null) {
             MDC.put("userName", userName);
             return ResponseEntity.status(HttpStatus.OK).body(token);

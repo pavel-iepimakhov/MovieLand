@@ -5,7 +5,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="getAllMoviesSql" class="java.lang.String">
-        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, group_concat(DISTINCT g.genre_name) genres, group_concat(DISTINCT c.country_name) countries
+        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, m.movie_price, group_concat(DISTINCT g.genre_name) genres, group_concat(DISTINCT c.country_name) countries
                                   FROM movies m
                                   JOIN movie_genres mg
                                     ON m.movie_id = mg.movie_id
@@ -15,18 +15,18 @@
                                     ON mc.movie_id = m.movie_id
                                   JOIN countries c
                                     ON c.country_id = mc.country_id
-                                GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating"/>
+                                GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating,m.movie_price"/>
     </bean>
 
     <bean id="getMovieByIdSql" class="java.lang.String">
-        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year,m.movie_rating, group_concat(DISTINCT c.country_name) countries
+        <constructor-arg value="SELECT m.movie_id, m.movie_name_eng, m.movie_name_rus, m.movie_year, m.movie_rating, m.movie_price, group_concat(DISTINCT c.country_name) countries
                                   FROM movies m
                                   JOIN movie_countries mc
                                     ON mc.movie_id = m.movie_id
                                   JOIN countries c
                                     ON c.country_id = mc.country_id
                                  WHERE m.movie_id = ?
-                                GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating"/>
+                                 GROUP BY m.movie_id,m.movie_name_eng,m.movie_name_rus,m.movie_year,m.movie_rating, m.movie_price"/>
     </bean>
 
     <bean id="getReviewsByMovieIdSql" class="java.lang.String">
@@ -83,6 +83,36 @@
                                   JOIN users u
                                     ON mr.user_id = u.user_id
                                  WHERE mr.review_id = ?"/>
+    </bean>
+
+    <bean id="mergeUserMovieRatingSql" class="java.lang.String">
+        <constructor-arg value="INSERT OR REPLACE INTO movie_rating
+                                (movie_id, user_id, rating)
+                                VALUES
+                                (?, ?, ?)"/>
+    </bean>
+
+    <bean id="getUserMovieRatingSql" class="java.lang.String">
+        <constructor-arg value="SELECT MAX(rating)
+                                  FROM movie_rating
+                                 WHERE movie_id = ?
+                                   AND user_id = ?"/>
+    </bean>
+
+    <bean id="updateAverageMovieRatingSql" class="java.lang.String">
+        <constructor-arg value="UPDATE movies
+                                   SET movie_rating = IFNULL((SELECT ROUND(AVG(mr.rating), 1)
+                                                                FROM movie_rating mr
+                                                               WHERE mr.movie_id = movies.movie_id), movie_rating)
+                                 WHERE movie_id = ?"/>
+    </bean>
+
+    <bean id="getMoviePosterSql" class="java.lang.String">
+        <constructor-arg value="SELECT poster_id,
+                                       movie_id,
+                                       poster_image
+                                  FROM movie_posters
+                                 WHERE movie_id = ?"/>
     </bean>
 
 </beans>

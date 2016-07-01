@@ -13,7 +13,9 @@
         <context:exclude-filter type="regex" expression="com\.movieland\.controller\..*" />
     </context:component-scan>
 
-    <context:property-placeholder location="classpath:jdbc.properties" />
+    <context:mbean-export/>
+
+    <context:property-placeholder location="classpath:movieland.properties" />
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
@@ -24,5 +26,14 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="2" />
+        <property name="maxPoolSize" value="10" />
+        <property name="queueCapacity" value="25" />
+    </bean>
+
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+
+    <bean id="modelMapper" class="org.modelmapper.ModelMapper"/>
 
 </beans>

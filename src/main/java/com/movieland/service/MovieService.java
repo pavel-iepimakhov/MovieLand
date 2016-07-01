@@ -9,4 +9,5 @@ public interface MovieService {
     List<Movie> getAllMovies();
     Movie getMovieById(int movieId);
     List<Genre> getGenresByMovieId(int movieId);
+    void updateAverageMovieRating(int movieId);
 }
