@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 
 import java.time.LocalDate;
@@ -16,10 +17,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
+@Service
 public class ReportServiceImpl implements ReportService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
-    private final static long REPORT_GENERATION_FIXED_RATE = 5 * 60 * 1000; //5 minutes
+    private final static long REPORT_GENERATION_FIXED_RATE = 1 * 60 * 1000; //5 minutes
 
     @Autowired
     TokenGeneratorService tokenGeneratorService;
