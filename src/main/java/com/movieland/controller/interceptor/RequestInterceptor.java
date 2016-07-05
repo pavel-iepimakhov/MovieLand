@@ -2,7 +2,7 @@ package com.movieland.controller.interceptor;
 
 import com.movieland.entity.User;
 import com.movieland.security.SecurityService;
-import com.movieland.security.TokenGeneratorService;
+import com.movieland.util.TokenGeneratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

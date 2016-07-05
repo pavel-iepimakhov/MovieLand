@@ -5,7 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.movieland.controller.ReviewController;
 import com.movieland.entity.User;
 import com.movieland.security.SecurityService;
-import com.movieland.security.TokenGeneratorService;
+import com.movieland.util.TokenGeneratorService;
 import com.movieland.service.UserService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
