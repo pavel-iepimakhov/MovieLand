@@ -1,6 +1,6 @@
 package com.movieland.util;
 
-public class ErrorMessage {
+public class Message {
     private String message;
 
     public String getMessage() {
@@ -11,7 +11,10 @@ public class ErrorMessage {
         this.message = message;
     }
 
-    public ErrorMessage(String message) {
+    public Message(String message) {
         this.message = message;
+    }
+
+    public Message() {
     }
 }

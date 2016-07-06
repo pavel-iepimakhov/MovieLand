@@ -40,7 +40,7 @@ public class ReportController {
                                                    @RequestParam("type") ReportTypeEnum reportType,
                                                    @RequestParam(value = "date", required = false) LocalDate reportDate,
                                                    @RequestParam("format") ReportFormatEnum reportFormat) {
-        ResponseEntity<String> unauthorizedResponse = new ResponseEntity<>(jsonConverterService.objectToJson(new ErrorMessage("Not authorized")), HttpStatus.UNAUTHORIZED);
+        ResponseEntity<String> unauthorizedResponse = new ResponseEntity<>(jsonConverterService.objectToJson(new Message("Not authorized")), HttpStatus.UNAUTHORIZED);
         if (securityToken != null) {
             User user = securityService.getUserByToken(securityToken);
             if (user != null && user.isAdmin()) {
@@ -52,8 +52,14 @@ public class ReportController {
 
     @RequestMapping(value = "/v1/report", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public ResponseEntity<String> checkReportRequestStatus(@RequestHeader(value = "Security-Token", required = false) String securityToken) {
-        return null;
+    public ResponseEntity<String> checkReportRequestStatus(@RequestParam("requestId") String requestId) {
+        Message response = new Message();
+        if(reportService.isReportRequestReady(requestId)) {
+            response.setMessage("Request has been completed already");
+        } else {
+            response.setMessage("Request isn't ready yet");
+        }
+        return new ResponseEntity<>(jsonConverterService.objectToJson(response), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/v1/report", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
@@ -63,8 +69,7 @@ public class ReportController {
     }
 
     @RequestMapping(value = "/v1/report", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public ResponseEntity<String> removeReportRequest(@RequestHeader(value = "Security-Token", required = false) String securityToken) {
-        return null;
+    public void removeReportRequest(@RequestParam("requestId") String requestId) {
+        reportService.removeReportRequest(requestId);
     }
 }

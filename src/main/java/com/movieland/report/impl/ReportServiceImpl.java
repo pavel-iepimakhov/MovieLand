@@ -29,14 +29,18 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
+    @Autowired
+    private ReportGeneratorFactory reportGeneratorFactory;
+
     private BlockingQueue<ReportRequest> requests = new LinkedBlockingQueue<>(10);
 
-    private ConcurrentHashMap<ReportRequest, ListenableFuture> results = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, ListenableFuture> results = new ConcurrentHashMap<>();
 
     @Override
     public AddReportRequestResponse addReportRequest(ReportTypeEnum reportType, LocalDate reportDate, ReportFormatEnum reportFormat, User user) {
         String requestId = tokenGeneratorService.getToken();
-        ReportRequest request = new ReportRequest(requestId, reportType, reportDate, reportFormat, user);
+        ReportGenerator reportGenerator = reportGeneratorFactory.getReportGenerator(reportFormat);
+        ReportRequest request = new ReportRequest(requestId, reportType, reportDate, reportFormat, user, reportGenerator);
         LOGGER.info("New report request: " + request);
         try {
             requests.put(request);
@@ -47,6 +51,17 @@ public class ReportServiceImpl implements ReportService {
         return new AddReportRequestResponse(requestId);
     }
 
+    @Override
+    public boolean isReportRequestReady(String requestId) {
+        ListenableFuture result = results.get(requestId);
+        return result.isDone();
+    }
+
+    @Override
+    public void removeReportRequest(String requestId) {
+        results.remove(requestId);
+    }
+
     @Scheduled(fixedRate = REPORT_GENERATION_FIXED_RATE)
     private void processQueuedReportRequests() throws InterruptedException {
         while(!requests.isEmpty()) {
@@ -54,7 +69,7 @@ public class ReportServiceImpl implements ReportService {
             ListenableFuture<ReportGenerationStatus> result = threadPoolTaskExecutor.submitListenable(request);
             result.addCallback((res) -> System.out.println("Success callback - send report via email"),
                                (res) -> System.out.println("Failure callback - send error report" + res));
-            results.put(request, result);
+            results.put(request.getRequestId(), result);
         }
 
     }

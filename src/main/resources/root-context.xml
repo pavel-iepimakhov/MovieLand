@@ -39,4 +39,14 @@
 
     <bean id="modelMapper" class="org.modelmapper.ModelMapper"/>
 
+    <bean id="reportGeneratorFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean" >
+        <property name="serviceLocatorInterface" value="com.movieland.report.ReportGeneratorFactory"/>
+        <property name="serviceMappings">
+            <props>
+                <prop key="EXCEL">excelGenerator</prop>
+                <prop key="PDF">pdfGenerator</prop>
+            </props>
+        </property>
+    </bean>
+
 </beans>

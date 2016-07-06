@@ -1,6 +1,9 @@
 package com.movieland.report;
 
 import com.movieland.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.concurrent.Callable;
@@ -12,6 +15,15 @@ public class ReportRequest implements Callable<ReportGenerationStatus> {
     LocalDate reportDate;
     ReportFormatEnum reportFormat;
     User user;
+    ReportGenerator reportGenerator;
+
+    public ReportGenerator getReportGenerator() {
+        return reportGenerator;
+    }
+
+    public void setReportGenerator(ReportGenerator reportGenerator) {
+        this.reportGenerator = reportGenerator;
+    }
 
     public String getRequestId() {
         return requestId;
@@ -53,12 +65,13 @@ public class ReportRequest implements Callable<ReportGenerationStatus> {
         this.user = user;
     }
 
-    public ReportRequest(String requestId, ReportTypeEnum reportType, LocalDate reportDate, ReportFormatEnum reportFormat, User user) {
+    public ReportRequest(String requestId, ReportTypeEnum reportType, LocalDate reportDate, ReportFormatEnum reportFormat, User user, ReportGenerator reportGenerator) {
         this.requestId = requestId;
         this.reportType = reportType;
         this.reportDate = reportDate;
         this.reportFormat = reportFormat;
         this.user = user;
+        this.reportGenerator = reportGenerator;
     }
 
     @Override
@@ -74,7 +87,6 @@ public class ReportRequest implements Callable<ReportGenerationStatus> {
 
     @Override
     public ReportGenerationStatus call() throws Exception {
-        //generate report with Apache POI
-        return new ReportGenerationStatus(ReportGenerationStatusEnum.OK, null);
+        return reportGenerator.generateReport(this);
     }
 }
