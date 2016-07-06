@@ -1,6 +1,7 @@
-package com.movieland.report;
+package com.movieland.report.impl;
 
 import com.movieland.entity.Movie;
+import com.movieland.report.*;
 import com.movieland.service.MovieService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -29,7 +30,7 @@ public class ExcelReportGenerator implements ReportGenerator {
     @Override
     public ReportGenerationStatus generateReport(ReportRequest request) {
         LOGGER.info("Generating Excel report for request : " + request);
-
+        String fileName = request.getReportType().toString() + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE) + ".xlsx";
         try {
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet spreadsheet = workbook.createSheet(request.getReportType().toString());
@@ -51,8 +52,6 @@ public class ExcelReportGenerator implements ReportGenerator {
                     cell.setCellValue(movie.getMovieRating());
                 }
             }
-
-            String fileName = request.getReportType().toString() + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE) + ".xlsx";
             FileOutputStream out = new FileOutputStream(new File(fileName));
             workbook.write(out);
             out.close();
@@ -63,6 +62,6 @@ public class ExcelReportGenerator implements ReportGenerator {
         }
 
 
-        return new ReportGenerationStatus(ReportGenerationStatusEnum.OK, null);
+        return new ReportGenerationStatus(ReportGenerationStatusEnum.OK, null, fileName);
     }
 }

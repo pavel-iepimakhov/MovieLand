@@ -3,6 +3,15 @@ package com.movieland.report;
 public class ReportGenerationStatus {
     ReportGenerationStatusEnum status;
     String errorMessage;
+    String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public ReportGenerationStatusEnum getStatus() {
         return status;
@@ -25,11 +34,18 @@ public class ReportGenerationStatus {
         return "ReportGenerationStatus{" +
                 "status=" + status +
                 ", errorMessage='" + errorMessage + '\'' +
+                ", fileName='" + fileName + '\'' +
                 '}';
     }
 
     public ReportGenerationStatus(ReportGenerationStatusEnum status, String errorMessage) {
         this.status = status;
         this.errorMessage = errorMessage;
+    }
+
+    public ReportGenerationStatus(ReportGenerationStatusEnum status, String errorMessage, String fileName) {
+        this.status = status;
+        this.errorMessage = errorMessage;
+        this.fileName = fileName;
     }
 }

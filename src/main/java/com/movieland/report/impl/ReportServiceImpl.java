@@ -12,6 +12,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,6 +36,8 @@ public class ReportServiceImpl implements ReportService {
     private BlockingQueue<ReportRequest> requests = new LinkedBlockingQueue<>(10);
 
     private ConcurrentHashMap<String, ListenableFuture> results = new ConcurrentHashMap<>();
+
+    private ConcurrentHashMap<String, File> generatedReportFiles = new ConcurrentHashMap<>();
 
     @Override
     public AddReportRequestResponse addReportRequest(ReportTypeEnum reportType, LocalDate reportDate, ReportFormatEnum reportFormat, User user) {
@@ -62,12 +65,20 @@ public class ReportServiceImpl implements ReportService {
         results.remove(requestId);
     }
 
+    @Override
+    public File getReportFile(String requestId) {
+        return generatedReportFiles.get(requestId);
+    }
+
     @Scheduled(fixedRate = REPORT_GENERATION_FIXED_RATE)
     private void processQueuedReportRequests() throws InterruptedException {
         while(!requests.isEmpty()) {
             ReportRequest request = requests.take();
             ListenableFuture<ReportGenerationStatus> result = threadPoolTaskExecutor.submitListenable(request);
-            result.addCallback((res) -> System.out.println("Success callback - send report via email"),
+            result.addCallback((res) -> {
+                                            generatedReportFiles.put(request.getRequestId(), new File(res.getFileName()));
+                                            System.out.println("Success callback - send report via email");
+                                        },
                                (res) -> System.out.println("Failure callback - send error report" + res));
             results.put(request.getRequestId(), result);
         }

@@ -1,4 +1,4 @@
-package com.movieland.report;
+package com.movieland.report.impl;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Phrase;
@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.movieland.entity.Movie;
+import com.movieland.report.*;
 import com.movieland.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +31,9 @@ public class PdfReportGenerator implements ReportGenerator {
     @Override
     public ReportGenerationStatus generateReport(ReportRequest request) {
         LOGGER.info("Generating PDF report for request : " + request);
-
+        String fileName = request.getReportType().toString() + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE) + request.getRequestId() + ".pdf";
         try {
             Document iTextDoc = new Document();
-            String fileName = request.getReportType().toString() + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE) + request.getRequestId() + ".pdf";
             PdfWriter.getInstance(iTextDoc, new FileOutputStream(fileName));
             iTextDoc.open();
             PdfPTable pdfPTable = new PdfPTable(4);
@@ -59,6 +59,6 @@ public class PdfReportGenerator implements ReportGenerator {
             LOGGER.info("Exception during report generation. " + e );
             return new ReportGenerationStatus(ReportGenerationStatusEnum.FAILURE, e.toString());
         }
-        return new ReportGenerationStatus(ReportGenerationStatusEnum.OK, null);
+        return new ReportGenerationStatus(ReportGenerationStatusEnum.OK, null, fileName);
     }
 }

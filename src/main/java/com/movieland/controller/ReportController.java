@@ -2,6 +2,7 @@ package com.movieland.controller;
 
 import com.movieland.entity.User;
 import com.movieland.entity.response.AddReportRequestResponse;
+import com.movieland.entity.response.CheckReportRequestStatusResponse;
 import com.movieland.report.ReportFormatEnum;
 import com.movieland.report.ReportService;
 import com.movieland.report.ReportTypeEnum;
@@ -11,9 +12,12 @@ import com.movieland.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -53,19 +57,14 @@ public class ReportController {
     @RequestMapping(value = "/v1/report", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public ResponseEntity<String> checkReportRequestStatus(@RequestParam("requestId") String requestId) {
-        Message response = new Message();
-        if(reportService.isReportRequestReady(requestId)) {
-            response.setMessage("Request has been completed already");
-        } else {
-            response.setMessage("Request isn't ready yet");
-        }
+        CheckReportRequestStatusResponse response = new CheckReportRequestStatusResponse(reportService.isReportRequestReady(requestId));
         return new ResponseEntity<>(jsonConverterService.objectToJson(response), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/v1/report", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/v1/report", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getReportLink(@RequestHeader(value = "Security-Token", required = false) String securityToken) {
-        return null;
+    public FileSystemResource getReportFile(@RequestParam("requestId") String requestId) {
+        return new FileSystemResource(reportService.getReportFile(requestId));
     }
 
     @RequestMapping(value = "/v1/report", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
